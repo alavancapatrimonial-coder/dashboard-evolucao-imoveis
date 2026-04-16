@@ -1,0 +1,1243 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simulador Consórcio Imobiliário · Alavanca Patrimonial</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+<style>
+/* ══════════════════════════════════════════
+   DESIGN TOKENS — Dark (default)
+══════════════════════════════════════════ */
+:root {
+  --bg-page:      #0a0f1e;
+  --bg-grad:      linear-gradient(135deg,#060912 0%,#0a0f1e 55%,#06091a 100%);
+  --bg-card:      rgba(15,23,42,.85);
+  --bg-input:     rgba(2,6,23,.65);
+  --bg-kpi:       rgba(15,23,42,.85);
+  --bg-hl:        rgba(12,18,38,.6);
+  --border-card:  rgba(148,163,184,.1);
+  --border-input: rgba(148,163,184,.16);
+  --border-met:   rgba(148,163,184,.07);
+  --border-div:   rgba(148,163,184,.09);
+  --shadow-card:  none;
+  --text-1:       #f1f5f9;
+  --text-2:       #94a3b8;
+  --text-3:       #64748b;
+  --text-4:       #475569;
+  --text-foot:    #334155;
+  /* scenario title / num colours */
+  --sc1-num:#f59e0b; --sc1-title:#fcd34d; --sc1-big:#fcd34d;
+  --sc2-num:#10b981; --sc2-title:#6ee7b7; --sc2-big:#6ee7b7;
+  --sc3-num:#6366f1; --sc3-title:#a78bfa; --sc3-big:#a78bfa;
+  /* accents */
+  --c-blue:  #60a5fa;
+  --c-purple:#a78bfa;
+  --c-orange:#fb923c;
+  --c-green: #34d399;
+  --c-red:   #f87171;
+  --c-pink:  #f472b6;
+  --c-pos:   #34d399;
+  --c-neg:   #f87171;
+  --c-gold:  #fcd34d;
+  --c-teal:  #6ee7b7;
+  /* chart */
+  --ch-grid:    rgba(148,163,184,.04);
+  --ch-tick:    #475569;
+  --ch-tt-bg:   rgba(2,6,23,.93);
+  --ch-tt-bdr:  rgba(148,163,184,.15);
+  --ch-tt-ttl:  #94a3b8;
+  --ch-tt-body: #f1f5f9;
+  /* badge / pill */
+  --badge-bg:  rgba(96,165,250,.1);
+  --badge-bdr: rgba(96,165,250,.3);
+  --badge-txt: #60a5fa;
+  --pill-pre-bg:  rgba(96,165,250,.12);
+  --pill-pre-bdr: rgba(96,165,250,.2);
+  --pill-pre-txt: #60a5fa;
+  --pill-pos-bg:  rgba(251,146,60,.12);
+  --pill-pos-bdr: rgba(251,146,60,.2);
+  --pill-pos-txt: #fb923c;
+  --incc-bg:  rgba(251,146,60,.08);
+  --incc-bdr: rgba(251,146,60,.15);
+  --incc-txt: #fb923c;
+  /* toggle button */
+  --toggle-bg:  rgba(30,41,59,.9);
+  --toggle-bdr: rgba(148,163,184,.2);
+  --toggle-txt: #94a3b8;
+  /* guide block */
+  --guide-bg:       rgba(99,102,241,.07);
+  --guide-bdr:      rgba(99,102,241,.22);
+  --guide-tag-bg:   rgba(99,102,241,.14);
+  --guide-tag-txt:  #a78bfa;
+  --guide-step-bg:  rgba(15,23,42,.6);
+  --guide-step-bdr: rgba(99,102,241,.15);
+  --guide-param-bg: rgba(250,204,21,.06);
+  --guide-param-bdr:rgba(250,204,21,.18);
+  --guide-param-txt:#facc15;
+  --guide-sc1:      rgba(245,158,11,.1);
+  --guide-sc2:      rgba(16,185,129,.1);
+  --guide-sc3:      rgba(99,102,241,.1);
+}
+
+/* ══════════════════════════════════════════
+   DESIGN TOKENS — Light
+══════════════════════════════════════════ */
+[data-theme="light"] {
+  --bg-page:      #edf1f8;
+  --bg-grad:      linear-gradient(135deg,#dce8fb 0%,#edf1f8 55%,#e4ecf7 100%);
+  --bg-card:      #ffffff;
+  --bg-input:     #f4f7fc;
+  --bg-kpi:       #ffffff;
+  --bg-hl:        #f0f4fb;
+  --border-card:  rgba(0,0,0,.08);
+  --border-input: rgba(0,0,0,.13);
+  --border-met:   rgba(0,0,0,.06);
+  --border-div:   rgba(0,0,0,.07);
+  --shadow-card:  0 1px 10px rgba(0,0,0,.07);
+  --text-1:       #0f172a;
+  --text-2:       #475569;
+  --text-3:       #64748b;
+  --text-4:       #94a3b8;
+  --text-foot:    #94a3b8;
+  --sc1-num:#b45309; --sc1-title:#92400e; --sc1-big:#b45309;
+  --sc2-num:#065f46; --sc2-title:#064e3b; --sc2-big:#065f46;
+  --sc3-num:#4338ca; --sc3-title:#3730a3; --sc3-big:#4338ca;
+  --c-blue:  #1d4ed8;
+  --c-purple:#6d28d9;
+  --c-orange:#c2410c;
+  --c-green: #047857;
+  --c-red:   #b91c1c;
+  --c-pink:  #be185d;
+  --c-pos:   #047857;
+  --c-neg:   #b91c1c;
+  --c-gold:  #92400e;
+  --c-teal:  #065f46;
+  --ch-grid:    rgba(0,0,0,.06);
+  --ch-tick:    #64748b;
+  --ch-tt-bg:   rgba(255,255,255,.97);
+  --ch-tt-bdr:  rgba(0,0,0,.1);
+  --ch-tt-ttl:  #64748b;
+  --ch-tt-body: #0f172a;
+  --badge-bg:  rgba(29,78,216,.08);
+  --badge-bdr: rgba(29,78,216,.2);
+  --badge-txt: #1d4ed8;
+  --pill-pre-bg:  rgba(29,78,216,.08);
+  --pill-pre-bdr: rgba(29,78,216,.2);
+  --pill-pre-txt: #1d4ed8;
+  --pill-pos-bg:  rgba(194,65,12,.08);
+  --pill-pos-bdr: rgba(194,65,12,.2);
+  --pill-pos-txt: #c2410c;
+  --incc-bg:  rgba(194,65,12,.07);
+  --incc-bdr: rgba(194,65,12,.18);
+  --incc-txt: #c2410c;
+  --toggle-bg:  #ffffff;
+  --toggle-bdr: rgba(0,0,0,.14);
+  --toggle-txt: #475569;
+  --guide-bg:       rgba(79,70,229,.05);
+  --guide-bdr:      rgba(79,70,229,.18);
+  --guide-tag-bg:   rgba(79,70,229,.1);
+  --guide-tag-txt:  #4338ca;
+  --guide-step-bg:  #f8f9ff;
+  --guide-step-bdr: rgba(79,70,229,.12);
+  --guide-param-bg: rgba(180,83,9,.06);
+  --guide-param-bdr:rgba(180,83,9,.2);
+  --guide-param-txt:#92400e;
+  --guide-sc1:      rgba(180,83,9,.07);
+  --guide-sc2:      rgba(6,95,70,.07);
+  --guide-sc3:      rgba(67,56,202,.07);
+}
+
+/* ══════════════════════════════════════════
+   BASE
+══════════════════════════════════════════ */
+*{margin:0;padding:0;box-sizing:border-box}
+html{transition:background .3s}
+
+body{
+  font-family:'Segoe UI',system-ui,sans-serif;
+  background: var(--bg-grad);
+  background-attachment: fixed;
+  min-height:100vh;
+  color:var(--text-1);
+  padding:16px;
+  transition: color .25s;
+}
+
+.container{max-width:1440px;margin:0 auto}
+
+/* ── TOGGLE BUTTON ─────────────────────── */
+.theme-btn{
+  position:fixed;top:18px;right:18px;z-index:1000;
+  display:flex;align-items:center;gap:7px;
+  padding:8px 16px;border-radius:22px;
+  border:1px solid var(--toggle-bdr);
+  background:var(--toggle-bg);
+  color:var(--toggle-txt);
+  cursor:pointer;font-size:.78rem;font-weight:600;
+  box-shadow:0 2px 12px rgba(0,0,0,.18);
+  transition:all .2s;
+}
+.theme-btn:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(0,0,0,.22)}
+
+/* ── HEADER ────────────────────────────── */
+.header{text-align:center;padding:28px 0 20px}
+.header h1{
+  font-size:2rem;font-weight:800;letter-spacing:-.5px;
+  background:linear-gradient(135deg,var(--c-blue),var(--c-purple),var(--c-pink));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.header p{color:var(--text-3);margin-top:6px;font-size:.9rem}
+.badge-ap{
+  display:inline-block;margin-top:8px;
+  padding:3px 14px;border-radius:20px;
+  background:var(--badge-bg);border:1px solid var(--badge-bdr);
+  color:var(--badge-txt);font-size:.75rem;font-weight:700;letter-spacing:.06em;
+  transition: background .25s, color .25s, border-color .25s;
+}
+
+/* ── CARDS ─────────────────────────────── */
+.card{
+  background:var(--bg-card);
+  backdrop-filter:blur(20px);
+  border:1px solid var(--border-card);
+  border-radius:16px;padding:20px;margin-bottom:16px;
+  box-shadow:var(--shadow-card);
+  transition:background .25s,border-color .25s,box-shadow .25s;
+}
+.card-title{
+  font-size:.72rem;font-weight:700;text-transform:uppercase;
+  letter-spacing:.12em;color:var(--text-4);margin-bottom:16px;
+  display:flex;align-items:center;gap:8px;
+}
+.card-title::after{content:'';flex:1;height:1px;background:var(--border-div)}
+
+/* ── INPUTS ────────────────────────────── */
+.inputs-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px}
+.input-group{display:flex;flex-direction:column;gap:6px}
+.input-group label{font-size:.78rem;color:var(--text-2);font-weight:500;transition:color .25s}
+.input-group input{
+  background:var(--bg-input);
+  border:1px solid var(--border-input);
+  border-radius:10px;padding:10px 14px;
+  color:var(--text-1);font-size:.95rem;outline:none;width:100%;
+  transition:border-color .2s,box-shadow .2s,background .25s,color .25s;
+}
+.input-group input:focus{border-color:var(--c-blue);box-shadow:0 0 0 3px rgba(96,165,250,.12)}
+
+.slider-wrap{margin-top:20px}
+.slider-wrap label{font-size:.78rem;color:var(--text-2);font-weight:500;display:block;margin-bottom:10px;transition:color .25s}
+.contemplation-display{display:flex;justify-content:space-between;align-items:center;margin-top:8px}
+.contemplation-month{font-size:1.4rem;font-weight:800;color:var(--c-blue);transition:color .25s}
+.contemplation-detail{font-size:.8rem;color:var(--text-3);transition:color .25s}
+.phase-pills{display:flex;gap:8px;flex-wrap:wrap}
+.pill{padding:3px 10px;border-radius:20px;font-size:.7rem;font-weight:700;transition:all .25s}
+.pill-pre{background:var(--pill-pre-bg);color:var(--pill-pre-txt);border:1px solid var(--pill-pre-bdr)}
+.pill-pos{background:var(--pill-pos-bg);color:var(--pill-pos-txt);border:1px solid var(--pill-pos-bdr)}
+
+/* ── KPI ROW ───────────────────────────── */
+.kpi-row{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin-bottom:16px}
+@media(max-width:1100px){.kpi-row{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:600px) {.kpi-row{grid-template-columns:repeat(2,1fr)}}
+.kpi{
+  background:var(--bg-kpi);
+  border:1px solid var(--border-card);
+  border-radius:14px;padding:14px;text-align:center;
+  box-shadow:var(--shadow-card);
+  transition:background .25s,border-color .25s,box-shadow .25s;
+}
+.kpi.blue  {border-color:rgba(96,165,250,.3)}
+.kpi.purple{border-color:rgba(167,139,250,.3)}
+.kpi.orange{border-color:rgba(251,146,60,.3)}
+.kpi.green {border-color:rgba(52,211,153,.3)}
+.kpi.red   {border-color:rgba(248,113,113,.3)}
+.kpi.pink  {border-color:rgba(244,114,182,.3)}
+[data-theme="light"] .kpi.blue  {border-color:rgba(29,78,216,.25)}
+[data-theme="light"] .kpi.purple{border-color:rgba(109,40,217,.25)}
+[data-theme="light"] .kpi.orange{border-color:rgba(194,65,12,.25)}
+[data-theme="light"] .kpi.green {border-color:rgba(4,120,87,.25)}
+[data-theme="light"] .kpi.red   {border-color:rgba(185,28,28,.25)}
+[data-theme="light"] .kpi.pink  {border-color:rgba(190,24,93,.25)}
+
+.kpi-label{font-size:.6rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text-4);margin-bottom:5px;font-weight:600;transition:color .25s}
+.kpi-val{font-size:1.1rem;font-weight:800;line-height:1;transition:color .25s}
+.kpi.blue   .kpi-val{color:var(--c-blue)}
+.kpi.purple .kpi-val{color:var(--c-purple)}
+.kpi.orange .kpi-val{color:var(--c-orange)}
+.kpi.green  .kpi-val{color:var(--c-green)}
+.kpi.red    .kpi-val{color:var(--c-red)}
+.kpi.pink   .kpi-val{color:var(--c-pink)}
+.kpi-sub{font-size:.6rem;color:var(--text-4);margin-top:4px;line-height:1.3;transition:color .25s}
+
+/* ── CHART ─────────────────────────────── */
+.chart-legend{display:flex;flex-wrap:wrap;gap:16px;margin-bottom:14px}
+.legend-item{display:flex;align-items:center;gap:6px;font-size:.75rem;color:var(--text-2);transition:color .25s}
+.legend-line{width:24px;height:3px;border-radius:2px}
+.legend-line.dashed{background:repeating-linear-gradient(90deg,#34d399 0,#34d399 5px,transparent 5px,transparent 8px)}
+.chart-wrap{position:relative;height:380px}
+
+/* ── SCENARIO CARDS ────────────────────── */
+.scenarios-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:20px}
+@media(max-width:900px){.scenarios-grid{grid-template-columns:1fr}}
+
+.sc-card{
+  background:var(--bg-card);
+  border:1px solid var(--border-card);
+  border-radius:16px;padding:22px;
+  position:relative;overflow:hidden;
+  box-shadow:var(--shadow-card);
+  transition:background .25s,border-color .25s,box-shadow .25s;
+}
+.sc-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:16px 16px 0 0}
+.sc1::before{background:linear-gradient(90deg,#f59e0b,#fcd34d)}
+.sc2::before{background:linear-gradient(90deg,#10b981,#6ee7b7)}
+.sc3::before{background:linear-gradient(90deg,#6366f1,#a78bfa)}
+
+.sc-num{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;margin-bottom:2px;transition:color .25s}
+.sc1 .sc-num{color:var(--sc1-num)}
+.sc2 .sc-num{color:var(--sc2-num)}
+.sc3 .sc-num{color:var(--sc3-num)}
+.sc-title{font-size:1rem;font-weight:700;margin-bottom:2px;transition:color .25s}
+.sc1 .sc-title{color:var(--sc1-title)}
+.sc2 .sc-title{color:var(--sc2-title)}
+.sc3 .sc-title{color:var(--sc3-title)}
+.sc-sub{font-size:.72rem;color:var(--text-4);margin-bottom:18px;line-height:1.4;transition:color .25s}
+
+.metric{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border-met);transition:border-color .25s}
+.metric:last-child{border-bottom:none}
+.m-label{font-size:.77rem;color:var(--text-3);flex:1;padding-right:8px;line-height:1.3;transition:color .25s}
+.m-val{font-size:.88rem;font-weight:600;color:var(--text-1);text-align:right;white-space:nowrap;transition:color .25s}
+.m-val.pos{color:var(--c-pos)}
+.m-val.neg{color:var(--c-neg)}
+.m-val.gold{color:var(--c-gold);font-size:.98rem;font-weight:800}
+.m-val.hl-green{color:var(--c-teal);font-size:.98rem;font-weight:800}
+.m-val.hl-purple{color:var(--c-purple);font-size:.98rem;font-weight:800}
+
+.sc-divider{height:1px;background:var(--border-div);margin:10px 0;transition:background .25s}
+.sc-highlight{background:var(--bg-hl);border-radius:10px;padding:12px;margin-top:10px;text-align:center;transition:background .25s}
+.sc-highlight .big{font-size:1.5rem;font-weight:800;transition:color .25s}
+.sc1 .sc-highlight .big{color:var(--sc1-big)}
+.sc2 .sc-highlight .big{color:var(--sc2-big)}
+.sc3 .sc-highlight .big{color:var(--sc3-big)}
+.sc-highlight .small{font-size:.7rem;color:var(--text-4);margin-top:3px;transition:color .25s}
+
+/* ── MISC ──────────────────────────────── */
+.incc-note{
+  display:inline-flex;align-items:center;gap:5px;
+  background:var(--incc-bg);border:1px solid var(--incc-bdr);
+  border-radius:6px;padding:2px 8px;
+  font-size:.68rem;color:var(--incc-txt);font-weight:500;
+  transition:all .25s;
+}
+/* ── GUIDE BLOCK ───────────────────────── */
+.guide-card{
+  background:var(--guide-bg);
+  border:1px solid var(--guide-bdr);
+  border-radius:16px;padding:0;margin-bottom:16px;
+  overflow:hidden;
+  transition:background .25s,border-color .25s;
+}
+.guide-header{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:16px 22px;cursor:pointer;user-select:none;
+}
+.guide-header-left{display:flex;align-items:center;gap:12px}
+.guide-icon{font-size:1.3rem;line-height:1}
+.guide-title{font-size:.9rem;font-weight:700;color:var(--text-1);transition:color .25s}
+.guide-tag{
+  display:inline-block;padding:2px 10px;border-radius:12px;
+  background:var(--guide-tag-bg);color:var(--guide-tag-txt);
+  font-size:.65rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;
+  transition:all .25s;
+}
+.guide-toggle{
+  display:flex;align-items:center;gap:6px;
+  font-size:.75rem;color:var(--text-3);font-weight:500;
+  background:none;border:none;cursor:pointer;padding:6px 12px;
+  border-radius:8px;border:1px solid var(--border-card);
+  transition:all .2s;color:var(--text-2);
+}
+.guide-toggle:hover{background:var(--bg-card)}
+.guide-arrow{transition:transform .3s;display:inline-block;font-size:.7rem}
+.guide-arrow.open{transform:rotate(180deg)}
+
+.guide-body{
+  max-height:0;overflow:hidden;
+  transition:max-height .4s ease, padding .3s ease;
+}
+.guide-body.open{max-height:1200px}
+
+.guide-inner{padding:0 22px 22px}
+.guide-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:800px){.guide-grid{grid-template-columns:1fr}}
+
+/* steps */
+.guide-section-title{
+  font-size:.65rem;font-weight:700;text-transform:uppercase;
+  letter-spacing:.1em;color:var(--text-4);margin-bottom:10px;
+  display:flex;align-items:center;gap:6px;
+}
+.guide-section-title::after{content:'';flex:1;height:1px;background:var(--border-div)}
+
+.guide-step{
+  background:var(--guide-step-bg);
+  border:1px solid var(--guide-step-bdr);
+  border-radius:10px;padding:12px 14px;margin-bottom:8px;
+  display:flex;gap:12px;align-items:flex-start;
+  transition:background .25s,border-color .25s;
+}
+.guide-step:last-child{margin-bottom:0}
+.step-num{
+  min-width:24px;height:24px;border-radius:50%;
+  background:var(--guide-tag-bg);color:var(--guide-tag-txt);
+  font-size:.7rem;font-weight:800;display:flex;align-items:center;
+  justify-content:center;flex-shrink:0;transition:all .25s;
+}
+.step-content{}
+.step-field{font-size:.78rem;font-weight:700;color:var(--text-1);margin-bottom:3px;transition:color .25s}
+.step-desc{font-size:.75rem;color:var(--text-3);line-height:1.5;transition:color .25s}
+.step-tip{
+  display:inline-block;margin-top:4px;padding:2px 8px;border-radius:6px;
+  font-size:.68rem;font-weight:600;
+  background:var(--guide-tag-bg);color:var(--guide-tag-txt);
+  transition:all .25s;
+}
+
+/* scenarios guide */
+.sc-guide-item{
+  border-radius:10px;padding:11px 14px;margin-bottom:8px;
+  display:flex;gap:10px;align-items:flex-start;
+  border:1px solid var(--border-card);
+  transition:all .25s;
+}
+.sc-guide-item:last-child{margin-bottom:0}
+.sc-guide-item.s1{background:var(--guide-sc1)}
+.sc-guide-item.s2{background:var(--guide-sc2)}
+.sc-guide-item.s3{background:var(--guide-sc3)}
+.sc-guide-icon{font-size:1.1rem;line-height:1.3;flex-shrink:0}
+.sc-guide-name{font-size:.78rem;font-weight:700;color:var(--text-1);margin-bottom:2px;transition:color .25s}
+.sc-guide-desc{font-size:.73rem;color:var(--text-3);line-height:1.45;transition:color .25s}
+.sc-guide-tag{font-size:.67rem;font-weight:600;color:var(--text-4);margin-top:3px;transition:color .25s}
+
+.footer-note{
+  text-align:center;color:var(--text-foot);font-size:.72rem;
+  padding:20px;line-height:1.8;
+  border-top:1px solid var(--border-div);margin-top:4px;
+  transition:color .25s,border-color .25s;
+}
+
+/* ══════════════════════════════════════════
+   CTA / LEAD CAPTURE BLOCK
+══════════════════════════════════════════ */
+.cta-block{
+  margin-top:32px;
+  border-radius:18px;
+  padding:48px 40px 44px;
+  background:linear-gradient(135deg,rgba(96,165,250,.08) 0%,rgba(167,139,250,.08) 50%,rgba(52,211,153,.06) 100%);
+  border:1px solid rgba(148,163,184,.13);
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+  transition:background .3s,border-color .3s;
+}
+[data-theme="light"] .cta-block{
+  background:linear-gradient(135deg,rgba(37,99,235,.06) 0%,rgba(109,40,217,.06) 50%,rgba(5,150,105,.05) 100%);
+  border:1px solid rgba(37,99,235,.15);
+}
+.cta-block::before{
+  content:'';
+  position:absolute;inset:0;
+  background:radial-gradient(ellipse 60% 50% at 50% 0%,rgba(96,165,250,.07),transparent);
+  pointer-events:none;
+}
+.cta-eyebrow{
+  font-size:.72rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--c-blue);margin-bottom:14px;
+}
+.cta-title{
+  font-size:1.7rem;font-weight:800;line-height:1.25;
+  color:var(--text-1);margin-bottom:10px;
+}
+.cta-title span{color:var(--c-blue);}
+.cta-sub{
+  font-size:.95rem;color:var(--text-2);
+  max-width:560px;margin:0 auto 32px;line-height:1.65;
+}
+.cta-form{
+  display:flex;flex-wrap:wrap;gap:14px;
+  justify-content:center;max-width:680px;margin:0 auto 22px;
+}
+.cta-field{
+  flex:1 1 180px;min-width:0;
+  display:flex;flex-direction:column;gap:5px;text-align:left;
+}
+.cta-field label{
+  font-size:.72rem;font-weight:600;color:var(--text-3);
+  text-transform:uppercase;letter-spacing:.08em;
+}
+.cta-field input{
+  background:var(--bg-input);border:1px solid var(--border-input);
+  border-radius:10px;padding:12px 14px;
+  font-size:.95rem;color:var(--text-1);
+  outline:none;transition:border-color .2s,box-shadow .2s;
+  width:100%;box-sizing:border-box;
+}
+.cta-field input::placeholder{color:var(--text-4);}
+.cta-field input:focus{
+  border-color:var(--c-blue);
+  box-shadow:0 0 0 3px rgba(96,165,250,.15);
+}
+.cta-btn{
+  display:inline-flex;align-items:center;gap:10px;
+  background:linear-gradient(135deg,#2563eb,#7c3aed);
+  color:#fff;border:none;border-radius:12px;
+  padding:15px 36px;font-size:1rem;font-weight:700;
+  cursor:pointer;letter-spacing:.03em;
+  box-shadow:0 4px 24px rgba(37,99,235,.35);
+  transition:transform .15s,box-shadow .15s,opacity .15s;
+}
+.cta-btn:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(37,99,235,.45);}
+.cta-btn:active{transform:translateY(0);}
+.cta-btn:disabled{opacity:.55;cursor:not-allowed;transform:none;}
+.cta-btn svg{width:18px;height:18px;flex-shrink:0;}
+.cta-privacy{font-size:.72rem;color:var(--text-4);margin-top:6px;}
+#ctaFeedback{
+  font-size:.9rem;font-weight:600;margin-top:18px;min-height:24px;
+  transition:color .2s;
+}
+#ctaFeedback.ok{color:var(--c-green);}
+#ctaFeedback.err{color:var(--c-red);}
+</style>
+</head>
+<body>
+
+<!-- TOGGLE BUTTON -->
+<button class="theme-btn" id="themeToggle">
+  <span id="themeIcon">☀️</span>
+  <span id="themeLabel">Modo Claro</span>
+</button>
+
+<div class="container">
+
+<!-- HEADER -->
+<div class="header">
+  <h1>Simulador de Consórcio Imobiliário</h1>
+  <p>Projete a evolução da sua cota e compare cenários de resultado</p>
+  <div class="badge-ap">Feito por ALAVANCA PATRIMONIAL</div>
+</div>
+
+<!-- GUIDE BLOCK -->
+<div class="guide-card" id="guideCard">
+  <div class="guide-header" id="guideHeader">
+    <div class="guide-header-left">
+      <span class="guide-icon">📋</span>
+      <span class="guide-title">Como usar este simulador</span>
+      <span class="guide-tag">Leia antes de simular</span>
+    </div>
+    <button class="guide-toggle" id="guideToggleBtn">
+      <span>Recolher</span>
+      <span class="guide-arrow open" id="guideArrow">▼</span>
+    </button>
+  </div>
+
+  <div class="guide-body open" id="guideBody">
+    <div class="guide-inner">
+      <div class="guide-grid">
+
+        <!-- COLUNA ESQUERDA: Passos -->
+        <div>
+          <div class="guide-section-title">Passo a passo — preenchimento dos campos</div>
+
+          <div class="guide-step">
+            <div class="step-num">1</div>
+            <div class="step-content">
+              <div class="step-field">Parcela Inicial (R$)</div>
+              <div class="step-desc">Informe o valor que você consegue pagar mensalmente <strong>hoje</strong>, sem comprometer seu orçamento. Considere até <strong>30% da sua renda pessoal mensal</strong>. Este valor define o tamanho da sua carta de crédito.</div>
+              <span class="step-tip">Exemplo: renda pessoal R$ 5.000 → parcela de até R$ 1.500</span>
+            </div>
+          </div>
+
+          <div class="guide-step">
+            <div class="step-num">2</div>
+            <div class="step-content">
+              <div class="step-field">Prazo do Grupo (meses)</div>
+              <div class="step-desc">Duração total do grupo de consórcio. Prazos maiores geram parcelas iniciais menores, mas aumentam o total pago ao longo do tempo. O padrão do mercado imobiliário é <strong>220 meses (18 anos e 4 meses)</strong>.</div>
+              <span class="step-tip">Sugestão: use 220 meses como base</span>
+            </div>
+          </div>
+
+          <div class="guide-step">
+            <div class="step-num">3</div>
+            <div class="step-content">
+              <div class="step-field">INCC Anual (%)</div>
+              <div class="step-desc">Índice Nacional de Custo da Construção — reajusta a carta de crédito uma vez por ano. Afeta diretamente o valor do crédito na contemplação e as parcelas ao longo do grupo. Use a <strong>média histórica de 6% a.a.</strong> como referência conservadora.</div>
+              <span class="step-tip">Cenário pessimista: 8–10% · Cenário otimista: 4–5%</span>
+            </div>
+          </div>
+
+          <div class="guide-step">
+            <div class="step-num">4</div>
+            <div class="step-content">
+              <div class="step-field">Taxa de Aluguel Mensal (%) — Cenário 2</div>
+              <div class="step-desc">Usado apenas no Cenário 2. Representa o percentual mensal que você espera receber de aluguel sobre o valor do imóvel adquirido. A taxa varia conforme o tipo de imóvel e o formato de locação: <strong>aluguel tradicional: 0,6% a 0,7% a.m.</strong> · <strong>aluguel por temporada / short stay: 0,8% a 1,0% a.m.</strong></div>
+              <span class="step-tip">Use 0,6% para aluguel convencional · 0,8%–1,0% para temporada ou imóvel comercial</span>
+            </div>
+          </div>
+
+          <div class="guide-step">
+            <div class="step-num">5</div>
+            <div class="step-content">
+              <div class="step-field">Mês de Contemplação (slider)</div>
+              <div class="step-desc">Arraste para simular em qual mês você será contemplado — seja por sorteio ou por lance. Quanto antes a contemplação, maior será a parcela pós-contemplação. Teste diferentes cenários para encontrar o equilíbrio ideal para o seu perfil.</div>
+              <span class="step-tip">Lance competitivo hoje: entre o mês 6 e o mês 36</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- COLUNA DIREITA: Parâmetros + Cenários -->
+        <div>
+          <div class="guide-section-title">Os 3 cenários — qual é o seu perfil?</div>
+
+          <div class="sc-guide-item s1">
+            <span class="sc-guide-icon">🏷️</span>
+            <div>
+              <div class="sc-guide-name">Cenário 1 — Venda da Cota (Ágio)</div>
+              <div class="sc-guide-desc">Ideal para quem quer <strong>lucro de curto/médio prazo</strong> sem precisar do imóvel. Você paga as parcelas reduzidas pré-contemplação, recebe o crédito e vende com ágio de 40%. Quanto antes a contemplação, maior o retorno sobre o capital investido.</div>
+              <div class="sc-guide-tag">📌 Perfil: investidor / especulador de crédito</div>
+            </div>
+          </div>
+
+          <div class="sc-guide-item s2">
+            <span class="sc-guide-icon">🏠</span>
+            <div>
+              <div class="sc-guide-name">Cenário 2 — Compra de Imóvel para Renda</div>
+              <div class="sc-guide-desc">Para quem quer construir <strong>patrimônio e renda passiva</strong>. Usa o crédito para adquirir um imóvel e recebe aluguel mensalmente. O ROI é calculado sobre o que você pagou antes de receber o crédito.</div>
+              <div class="sc-guide-tag">📌 Perfil: investidor de renda / construção de patrimônio</div>
+            </div>
+          </div>
+
+          <div class="sc-guide-item s3">
+            <span class="sc-guide-icon">📈</span>
+            <div>
+              <div class="sc-guide-name">Cenário 3 — Fundo Ademicon (0,9% a.m.)</div>
+              <div class="sc-guide-desc">Para quem não precisa do imóvel imediatamente e quer que o crédito se <strong>valorize dentro do próprio consórcio</strong>. O rendimento de 0,9% a.m. incide sobre o capital total da carta, não sobre o valor pago — criando uma alavancagem financeira.</div>
+              <div class="sc-guide-tag">📌 Perfil: investidor financeiro / reserva estratégica</div>
+            </div>
+          </div>
+
+        </div>
+      </div><!-- /guide-grid -->
+    </div><!-- /guide-inner -->
+  </div><!-- /guide-body -->
+</div><!-- /guide-card -->
+
+<!-- INPUTS -->
+<div class="card">
+  <div class="card-title">Parâmetros da Simulação</div>
+  <div class="inputs-grid">
+    <div class="input-group">
+      <label>Parcela Inicial (R$)</label>
+      <input type="number" id="iParcela" placeholder="Ex: 1.500" min="200" max="100000" step="100">
+    </div>
+    <div class="input-group">
+      <label>Prazo do Grupo (meses)</label>
+      <input type="number" id="iPrazo" placeholder="Ex: 220" min="60" max="240" step="12">
+    </div>
+    <div class="input-group">
+      <label>INCC Anual (%)</label>
+      <input type="number" id="iINCC" value="6" min="0" max="20" step="0.5">
+    </div>
+    <div class="input-group">
+      <label>Taxa de Aluguel Mensal — Cen. 2 (%)</label>
+      <input type="number" id="iAluguel" value="0.70" min="0.1" max="3" step="0.05">
+    </div>
+  </div>
+  <div class="slider-wrap">
+    <label>Mês de Contemplação — arraste para simular &nbsp;<span class="incc-note">⚡ INCC aplica em degrau anual todo mês 12, 24, 36…</span></label>
+    <input type="range" id="sContempl" min="1" max="179" value="60" style="width:100%;accent-color:var(--c-blue);cursor:pointer">
+    <div class="contemplation-display">
+      <div>
+        <div class="contemplation-month" id="dMes">Mês 60</div>
+        <div class="contemplation-detail" id="dDetalhe">5 anos de pré-contemplação · 120 meses restantes</div>
+      </div>
+      <div class="phase-pills">
+        <div class="pill pill-pre" id="dPillPre">PRÉ: 60 meses</div>
+        <div class="pill pill-pos" id="dPillPos">PÓS: 120 meses</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- KPI CARDS -->
+<div class="kpi-row">
+  <div class="kpi blue">
+    <div class="kpi-label">Crédito Inicial</div>
+    <div class="kpi-val" id="kC0">—</div>
+    <div class="kpi-sub">Carta de crédito (parcela ÷ 0,3377%)</div>
+  </div>
+  <div class="kpi red" style="display:none">
+    <div class="kpi-label">Saldo Devedor Inicial</div>
+    <div class="kpi-val" id="kSI">—</div>
+    <div class="kpi-sub">Crédito + 24% taxa adm.</div>
+  </div>
+  <div class="kpi purple">
+    <div class="kpi-label">Crédito (Contemplação)</div>
+    <div class="kpi-val" id="kCC">—</div>
+    <div class="kpi-sub" id="kCCSub">com INCC acumulado</div>
+  </div>
+  <div class="kpi orange" style="display:none">
+    <div class="kpi-label">Saldo Devedor Contempl.</div>
+    <div class="kpi-val" id="kSD">—</div>
+    <div class="kpi-sub">Crédito×1,24 − pago pré</div>
+  </div>
+  <div class="kpi pink">
+    <div class="kpi-label">Parcela Pós-Contemplação</div>
+    <div class="kpi-val" id="kPP">—</div>
+    <div class="kpi-sub">Inicial · reajusta anualmente</div>
+  </div>
+  <div class="kpi green" style="display:none">
+    <div class="kpi-label">Desembolso Total</div>
+    <div class="kpi-val" id="kDT">—</div>
+    <div class="kpi-sub">Soma real pré + pós c/ INCC</div>
+  </div>
+</div>
+
+<!-- CHART -->
+<div class="card">
+  <div class="card-title">Evolução da Cota ao Longo do Tempo</div>
+  <div class="chart-legend">
+    <div class="legend-item"><div class="legend-line" style="background:#60a5fa"></div>Carta de Crédito (INCC anual)</div>
+    <div class="legend-item"><div class="legend-line dashed"></div>Desembolso Acumulado</div>
+    <div class="legend-item"><div class="legend-line" style="background:#f472b6"></div>Parcela Mensal (eixo dir.)</div>
+    <div class="legend-item"><div class="legend-line" style="background:#facc15;height:2px"></div>Contemplação</div>
+  </div>
+  <div class="chart-wrap"><canvas id="chart"></canvas></div>
+</div>
+
+<!-- SCENARIOS HEADER -->
+<div class="card" style="margin-bottom:16px;padding:12px 20px">
+  <div style="text-align:center;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--text-4)">
+    Análise de Resultados Pós-Contemplação · Escolha seu Cenário
+  </div>
+</div>
+
+<div class="scenarios-grid">
+
+  <!-- CENÁRIO 1 -->
+  <div class="sc-card sc1">
+    <div class="sc-num">Cenário 1</div>
+    <div class="sc-title">Venda da Cota</div>
+    <div class="sc-sub">Venda para a Ademicon com ágio bruto de 40% sobre o crédito atualizado. Desembolso = apenas parcelas pré-contemplação.</div>
+    <div class="metric"><span class="m-label">Crédito Atualizado (Contemplação)</span><span class="m-val" id="s1Cred">—</span></div>
+    <div class="metric"><span class="m-label">Ágio Bruto (40% sobre crédito)</span><span class="m-val pos" id="s1Agio">—</span></div>
+    <div class="metric"><span class="m-label">Desembolso Total Pré-Contemplação</span><span class="m-val" id="s1Desemb">—</span></div>
+    <div class="sc-divider"></div>
+    <div class="metric"><span class="m-label">Receita Líquida (ágio − desembolso)</span><span class="m-val pos" id="s1Rec">—</span></div>
+    <div class="metric"><span class="m-label">ROI Total</span><span class="m-val pos" id="s1ROI">—</span></div>
+    <div class="metric"><span class="m-label">ROI Mensal (equiv. composto)</span><span class="m-val pos" id="s1ROIm">—</span></div>
+    <div class="sc-highlight">
+      <div class="big" id="s1Big">—</div>
+      <div class="small">Receita Líquida (Ágio − Desembolso)</div>
+    </div>
+  </div>
+
+  <!-- CENÁRIO 2 -->
+  <div class="sc-card sc2">
+    <div class="sc-num">Cenário 2</div>
+    <div class="sc-title">Compra de Patrimônio</div>
+    <div class="sc-sub">Usa o crédito para adquirir imóvel e gera renda de aluguel. ROI mensal = renda bruta ÷ desembolso pré-contemplação.</div>
+    <div class="metric"><span class="m-label">Valor do Imóvel (crédito contempl.)</span><span class="m-val" id="s2Imovel">—</span></div>
+    <div class="metric"><span class="m-label">Taxa de Aluguel Projetada</span><span class="m-val" id="s2Taxa">—</span></div>
+    <div class="metric"><span class="m-label">Renda Bruta Mensal</span><span class="m-val pos" id="s2Renda">—</span></div>
+    <div class="metric"><span class="m-label">Parcela Pós-Contempl. (inicial)</span><span class="m-val" id="s2Parc">—</span></div>
+    <div class="metric"><span class="m-label">Renda Líquida Mensal (inicial)</span><span class="m-val pos" id="s2RendaLiq">—</span></div>
+    <div class="sc-divider"></div>
+    <div class="metric"><span class="m-label">Desembolso Base ROI (pré-contemplação)</span><span class="m-val" id="s2DesembROI">—</span></div>
+    <div class="metric"><span class="m-label">ROI Mensal (renda bruta ÷ desemb. pré)</span><span class="m-val hl-green" id="s2ROIm">—</span></div>
+    <div class="sc-highlight">
+      <div class="big" id="s2Big">—</div>
+      <div class="small">Renda Líquida Mensal Inicial</div>
+    </div>
+  </div>
+
+  <!-- CENÁRIO 3 -->
+  <div class="sc-card sc3">
+    <div class="sc-num">Cenário 3</div>
+    <div class="sc-title">Fundo Ademicon</div>
+    <div class="sc-sub">Crédito investido no fundo a 0,9% a.m. sobre o capital total da carta. Reajuste via INCC 6% a.a. Desembolso = pré + pós.</div>
+    <div class="metric"><span class="m-label">Capital da Carta (contemplação)</span><span class="m-val" id="s3Cap">—</span></div>
+    <div class="metric"><span class="m-label">Rendimento Mensal Inicial (0,9%)</span><span class="m-val pos" id="s3Rend">—</span></div>
+    <div class="metric"><span class="m-label">Meses no Fundo até Fim do Grupo</span><span class="m-val" id="s3Meses">—</span></div>
+    <div class="metric"><span class="m-label">Valor Final do Crédito (0,9% a.m.)</span><span class="m-val pos" id="s3Final">—</span></div>
+    <div class="sc-divider"></div>
+    <div class="metric"><span class="m-label">Desembolso Total (pré + pós c/ INCC)</span><span class="m-val" id="s3Desemb">—</span></div>
+    <div class="metric"><span class="m-label">Ganho Líquido</span><span class="m-val pos" id="s3Ganho">—</span></div>
+    <div class="sc-highlight">
+      <div class="big" id="s3Big">—</div>
+      <div class="small">Valor Final do Crédito no Fundo</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══ CTA / LEAD CAPTURE ══ -->
+<div class="cta-block">
+  <div class="cta-eyebrow">Próximo passo</div>
+  <div class="cta-title">Sua simulação está pronta.<br><span>Agora é hora de transformar em realidade.</span></div>
+  <div class="cta-sub">Um especialista da Alavanca Patrimonial vai analisar o seu perfil, validar os números e montar um planejamento personalizado — sem enrolação, sem compromisso.</div>
+
+  <form id="ctaForm" onsubmit="submitLead(event)">
+    <div class="cta-form">
+      <div class="cta-field">
+        <label for="fNome">Nome completo</label>
+        <input type="text" id="fNome" name="nome" placeholder="Seu nome" required autocomplete="name">
+      </div>
+      <div class="cta-field">
+        <label for="fEmail">E-mail</label>
+        <input type="email" id="fEmail" name="email" placeholder="seu@email.com" required autocomplete="email">
+      </div>
+      <div class="cta-field">
+        <label for="fTel">Telefone / WhatsApp</label>
+        <input type="tel" id="fTel" name="telefone" placeholder="(11) 99999-9999" required autocomplete="tel">
+      </div>
+    </div>
+    <button type="submit" class="cta-btn" id="ctaBtn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="M22 2 15 22 11 13 2 9l20-7z"/></svg>
+      Quero falar com um especialista
+    </button>
+    <div class="cta-privacy">🔒 Seus dados são confidenciais e não serão compartilhados com terceiros.</div>
+  </form>
+  <div id="ctaFeedback"></div>
+</div>
+
+<div class="footer-note">
+  * Simulação educacional. Valores sujeitos a condições reais do grupo, INCC vigente e regulamento da Ademicon.<br>
+  <strong>Crédito inicial:</strong> Parcela ÷ 0,3377% &nbsp;|&nbsp;
+  <strong>Saldo devedor:</strong> Crédito × 1,24 (incl. 24% taxa adm.) &nbsp;|&nbsp;
+  <strong>Pré-contemplação:</strong> Parcela = Crédito × 0,3377% (INCC anual sobre o crédito) &nbsp;|&nbsp;
+  <strong>Pós-contemplação:</strong> Parcela = Saldo ÷ Prazo Restante (recalcula a cada INCC anual) &nbsp;|&nbsp;
+  <strong>Cenário 3:</strong> Fundo 0,9% a.m. sobre capital total da carta
+</div>
+
+</div><!-- /container -->
+
+<script>
+const R  = v  => v.toLocaleString('pt-BR',{style:'currency',currency:'BRL',maximumFractionDigits:0});
+const P  = (v,d=2) => v.toFixed(d).replace('.',',') + '%';
+const el = id => document.getElementById(id);
+
+// URL do Google Apps Script Web App — endpoint de captação de leads
+const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbw8Gl_5HXejq1AYWjUcvViZYVhPORCpIwjklJxoX1QaCtQylqNrAfJgqm0p_Utmeq4Y/exec';
+
+let lastSim = null; // armazena último resultado para envio no lead
+
+// ══════════════════════════════════════════════════
+//  SIMULAÇÃO PRINCIPAL
+// ══════════════════════════════════════════════════
+function simulate(parcela, prazo, inccAA, aluguelPct, mc) {
+  const TAXA_PRE  = 0.003377;
+  const TAXA_ADM  = 0.24;
+  const TAXA_FUND = 0.009;
+  const inccF     = inccAA / 100;
+
+  const c0        = parcela / TAXA_PRE;
+  const saldoInic = c0 * (1 + TAXA_ADM);
+
+  const data = [];
+  data.push({ m:0, credit:c0, saldo:saldoInic, parc:0, cumul:0, phase:'pre' });
+
+  let credit = c0, totalPaidPre = 0;
+
+  for (let m = 1; m <= mc; m++) {
+    if (m % 12 === 0) credit *= (1 + inccF);
+    const parc = credit * TAXA_PRE;
+    totalPaidPre += parc;
+    const saldo = Math.max(0, credit * (1 + TAXA_ADM) - totalPaidPre);
+    data.push({ m, credit, saldo, parc, cumul: totalPaidPre, phase:'pre' });
+  }
+
+  const creditContempl = credit;
+  const saldoContempl  = Math.max(0, creditContempl * (1 + TAXA_ADM) - totalPaidPre);
+  const mesesRest      = prazo - mc;
+
+  let postSaldo = saldoContempl;
+  let postParc  = mesesRest > 0 ? postSaldo / mesesRest : 0;
+  const parcelaPos0 = postParc;
+  let totalPaidPos = 0;
+  let chartCredit  = creditContempl;
+
+  for (let m = mc + 1; m <= prazo; m++) {
+    if (m % 12 === 0) {
+      chartCredit *= (1 + inccF);
+      postSaldo   *= (1 + inccF);
+      const rem    = prazo - m + 1;
+      postParc     = rem > 0 ? postSaldo / rem : postSaldo;
+    }
+    totalPaidPos += postParc;
+    postSaldo     = Math.max(0, postSaldo - postParc);
+    data.push({ m, credit:chartCredit, saldo:postSaldo, parc:postParc,
+                cumul: totalPaidPre + totalPaidPos, phase:'pos' });
+  }
+
+  const totalDesemb = totalPaidPre + totalPaidPos;
+
+  const s1 = (() => {
+    const cred   = creditContempl;
+    const agio   = cred * 0.40;
+    const desemb = totalPaidPre;
+    const rec    = agio - desemb;
+    const roiTot = desemb > 0 ? (rec / desemb) * 100 : 0;
+    const roiMen = mc > 0 ? (Math.pow(1 + roiTot / 100, 1 / mc) - 1) * 100 : 0;
+    return { cred, agio, desemb, rec, roiTot, roiMen };
+  })();
+
+  const s2 = (() => {
+    const imovel     = creditContempl;
+    const rendaBruta = imovel * (aluguelPct / 100);
+    const rendaLiq   = rendaBruta - parcelaPos0;
+    const desembROI  = totalPaidPre;
+    const roiMen     = desembROI > 0 ? (rendaBruta / desembROI) * 100 : 0;
+    return { imovel, rendaBruta, rendaLiq, desembROI,
+             desemb: totalDesemb, roiMen, parcelaPos: parcelaPos0 };
+  })();
+
+  const s3 = (() => {
+    const cap    = creditContempl;
+    const rendM  = cap * TAXA_FUND;
+    const final_ = cap * Math.pow(1 + TAXA_FUND, mesesRest);
+    const desemb = totalDesemb;
+    const ganho  = final_ - desemb;
+    return { cap, rendM, final: final_, desemb, ganho, mesesRest };
+  })();
+
+  return { c0, saldoInic, creditContempl, saldoContempl,
+           parcelaPos: parcelaPos0, totalPaidPre, totalDesemb, mesesRest,
+           data, s1, s2, s3 };
+}
+
+// ══════════════════════════════════════════════════
+//  GRÁFICO
+// ══════════════════════════════════════════════════
+let myChart = null;
+
+const contemplPlugin = {
+  id: 'contemplLine',
+  afterDatasetsDraw(chart, _, opts) {
+    const { ctx, chartArea:{ top, bottom }, scales:{ x } } = chart;
+    if (opts.index == null) return;
+    const px = x.getPixelForValue(opts.index);
+    ctx.save();
+    ctx.setLineDash([6,4]);
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = 'rgba(250,204,21,.9)';
+    ctx.beginPath(); ctx.moveTo(px, top); ctx.lineTo(px, bottom); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = 'rgba(250,204,21,.95)';
+    ctx.font = 'bold 11px Segoe UI, sans-serif';
+    ctx.fillText('▲ Contemplação', px - 58, top + 14);
+    ctx.restore();
+  }
+};
+
+function chartTheme() {
+  const light = document.documentElement.dataset.theme === 'light';
+  return {
+    grid:    light ? 'rgba(0,0,0,.07)'           : 'rgba(148,163,184,.04)',
+    tick:    light ? '#64748b'                   : '#475569',
+    ttBg:    light ? 'rgba(255,255,255,.97)'     : 'rgba(2,6,23,.93)',
+    ttBdr:   light ? 'rgba(0,0,0,.1)'            : 'rgba(148,163,184,.15)',
+    ttTitle: light ? '#64748b'                   : '#94a3b8',
+    ttBody:  light ? '#0f172a'                   : '#f1f5f9',
+    cFill:   light ? 'rgba(29,78,216,.06)'       : 'rgba(96,165,250,.05)',
+    oFill:   light ? 'rgba(194,65,12,.05)'       : 'rgba(251,146,60,.04)',
+    pFill:   light ? 'rgba(190,24,93,.07)'       : 'rgba(244,114,182,.07)',
+    tickY2:  light ? '#be185d'                   : '#f472b6',
+  };
+}
+
+function renderChart(res, mc, prazo) {
+  const step = prazo > 120 ? 2 : 1;
+  const labels=[], credArr=[], saldoArr=[], cumulArr=[], parcArr=[];
+
+  for (let m = 0; m <= prazo; m += step) {
+    const d = res.data[m]; if (!d) continue;
+    labels.push(m === 0 ? 'Início' : `M${m}`);
+    credArr.push(d.credit); saldoArr.push(d.saldo);
+    cumulArr.push(d.cumul); parcArr.push(d.parc);
+  }
+
+  const mcIdx = Math.round(mc / step);
+  const ctx   = el('chart').getContext('2d');
+  const t     = chartTheme();
+  if (myChart) myChart.destroy();
+
+  myChart = new Chart(ctx, {
+    type: 'line',
+    plugins: [contemplPlugin],
+    data: {
+      labels,
+      datasets: [
+        { label:'Carta de Crédito', data:credArr,
+          borderColor:'#60a5fa', backgroundColor:t.cFill,
+          borderWidth:2.5, pointRadius:0, fill:true, tension:0, yAxisID:'y' },
+        { label:'Desembolso Acumulado', data:cumulArr,
+          borderColor:'#34d399', borderDash:[6,3],
+          borderWidth:2, pointRadius:0, fill:false, tension:0.15, yAxisID:'y',
+          creditRef: credArr },
+        { label:'Parcela Mensal', data:parcArr,
+          borderColor:'#f472b6', backgroundColor:t.pFill,
+          borderWidth:2, pointRadius:0, fill:true, tension:0, yAxisID:'y2' }
+      ]
+    },
+    options: {
+      responsive:true, maintainAspectRatio:false,
+      animation:{ duration:250 },
+      interaction:{ mode:'index', intersect:false },
+      plugins: {
+        legend:{ display:false },
+        contemplLine:{ index:mcIdx },
+        tooltip:{
+          backgroundColor:t.ttBg, borderColor:t.ttBdr, borderWidth:1,
+          titleColor:t.ttTitle, bodyColor:t.ttBody, padding:12,
+          callbacks:{ label: c => {
+            if (c.dataset.label === 'Desembolso Acumulado') {
+              const cred = c.dataset.creditRef ? c.dataset.creditRef[c.dataIndex] : 0;
+              const pct  = cred > 0 ? (c.parsed.y / cred * 100).toFixed(1) : 0;
+              return ` ${c.dataset.label}: ${R(c.parsed.y)} (${pct}% do crédito)`;
+            }
+            return ` ${c.dataset.label}: ${R(c.parsed.y)}`;
+          }}
+        }
+      },
+      scales: {
+        x:{ grid:{ color:t.grid }, ticks:{ color:t.tick, maxTicksLimit:18, font:{size:11} } },
+        y:{ position:'left', grid:{ color:t.grid },
+            ticks:{ color:t.tick, font:{size:11},
+              callback: v => v>=1e6?'R$'+(v/1e6).toFixed(1)+'M':v>=1000?'R$'+(v/1000).toFixed(0)+'k':'R$'+v } },
+        y2:{ position:'right', grid:{ display:false },
+             ticks:{ color:t.tickY2, font:{size:11},
+               callback: v => v>=1000?'R$'+(v/1000).toFixed(1)+'k':'R$'+v } }
+      }
+    }
+  });
+}
+
+// ══════════════════════════════════════════════════
+//  UPDATE UI
+// ══════════════════════════════════════════════════
+function updateUI() {
+  const parcela = parseFloat(el('iParcela').value) || 0;
+  const prazo   = parseInt(el('iPrazo').value)     || 0;
+  if (!parcela || !prazo) return;
+  const incc    = parseFloat(el('iINCC').value)    || 6;
+  const aluguel = parseFloat(el('iAluguel').value) || 0.7;
+
+  const slider = el('sContempl');
+  slider.max   = prazo - 1;
+  const mc     = Math.min(parseInt(slider.value) || 60, prazo - 1);
+  slider.value = mc;
+
+  const anos = Math.floor(mc/12), meses = mc%12;
+  const anoStr = anos  > 0 ? `${anos} ano${anos>1?'s':''} ` : '';
+  const mesStr = meses > 0 ? `${meses} mês${meses>1?'es':''}` : '';
+
+  el('dMes').textContent     = `Mês ${mc}`;
+  el('dDetalhe').textContent = `${anoStr}${mesStr} de pré-contemplação · ${prazo - mc} meses restantes`;
+  el('dPillPre').textContent = `PRÉ: ${mc} meses`;
+  el('dPillPos').textContent = `PÓS: ${prazo - mc} meses`;
+
+  const r = simulate(parcela, prazo, incc, aluguel, mc);
+
+  el('kC0').textContent    = R(r.c0);
+  el('kSI').textContent    = R(r.saldoInic);
+  el('kCC').textContent    = R(r.creditContempl);
+  el('kCCSub').textContent = `INCC ${incc}% a.a. aplicado ${Math.floor(mc/12)} vez${Math.floor(mc/12)!==1?'es':''}`;
+  el('kSD').textContent    = R(r.saldoContempl);
+  el('kPP').textContent    = R(r.parcelaPos);
+  el('kDT').textContent    = R(r.totalDesemb);
+
+  el('s1Cred').textContent   = R(r.s1.cred);
+  el('s1Agio').textContent   = R(r.s1.agio);
+  el('s1Desemb').textContent = R(r.s1.desemb);
+  el('s1Rec').textContent    = R(r.s1.rec);
+  el('s1Rec').className      = 'm-val ' + (r.s1.rec >= 0 ? 'pos' : 'neg');
+  el('s1ROI').textContent    = P(r.s1.roiTot);
+  el('s1ROIm').textContent   = P(r.s1.roiMen, 3) + ' a.m.';
+  el('s1Big').textContent    = R(r.s1.rec);
+  el('s1Big').style.color    = r.s1.rec >= 0
+    ? getComputedStyle(document.documentElement).getPropertyValue('--sc1-big').trim()
+    : getComputedStyle(document.documentElement).getPropertyValue('--c-neg').trim();
+
+  el('s2Imovel').textContent    = R(r.s2.imovel);
+  el('s2Taxa').textContent      = P(aluguel) + ' a.m. sobre o valor do imóvel';
+  el('s2Renda').textContent     = R(r.s2.rendaBruta);
+  el('s2Parc').textContent      = R(r.s2.parcelaPos);
+  el('s2RendaLiq').textContent  = R(r.s2.rendaLiq);
+  el('s2RendaLiq').className    = 'm-val ' + (r.s2.rendaLiq >= 0 ? 'pos' : 'neg');
+  el('s2DesembROI').textContent = R(r.s2.desembROI);
+  el('s2ROIm').textContent      = P(r.s2.roiMen, 3) + ' a.m.';
+  el('s2Big').textContent       = R(r.s2.rendaLiq);
+
+  el('s3Cap').textContent    = R(r.s3.cap);
+  el('s3Rend').textContent   = R(r.s3.rendM);
+  el('s3Meses').textContent  = r.s3.mesesRest + ' meses no fundo';
+  el('s3Final').textContent  = R(r.s3.final);
+  el('s3Desemb').textContent = R(r.s3.desemb);
+  el('s3Ganho').textContent  = R(r.s3.ganho);
+  el('s3Ganho').className    = 'm-val ' + (r.s3.ganho >= 0 ? 'pos' : 'neg');
+  el('s3Big').textContent    = R(r.s3.final);
+
+  renderChart(r, mc, prazo);
+
+  // Salva estado da simulação para captura no lead
+  lastSim = {
+    parcela, prazo, incc, aluguel, mc,
+    creditoInicial:   r.c0,
+    parcelaPos:       r.parcelaPos,
+    totalDesemb:      r.totalDesemb,
+    // Cenário 1
+    s1Cred:   r.s1.cred,
+    s1Agio:   r.s1.agio,
+    s1Rec:    r.s1.rec,
+    s1ROI:    r.s1.roiTot,
+    s1ROIm:   r.s1.roiMen,
+    // Cenário 2
+    s2Imovel: r.s2.imovel,
+    s2Renda:  r.s2.rendaBruta,
+    s2ROIm:   r.s2.roiMen,
+    // Cenário 3
+    s3Cap:    r.s3.cap,
+    s3Final:  r.s3.final,
+    s3Ganho:  r.s3.ganho,
+  };
+}
+
+// ══════════════════════════════════════════════════
+//  GUIDE BLOCK COLLAPSE
+// ══════════════════════════════════════════════════
+(function() {
+  const body   = el('guideBody');
+  const arrow  = el('guideArrow');
+  const btn    = el('guideToggleBtn');
+  const header = el('guideHeader');
+  const STORAGE_KEY = 'apGuideOpen';
+
+  function setGuide(open) {
+    if (open) {
+      body.classList.add('open');
+      arrow.classList.add('open');
+      btn.querySelector('span').textContent = 'Recolher';
+    } else {
+      body.classList.remove('open');
+      arrow.classList.remove('open');
+      btn.querySelector('span').textContent = 'Expandir';
+    }
+    localStorage.setItem(STORAGE_KEY, open ? '1' : '0');
+  }
+
+  function toggle() { setGuide(!body.classList.contains('open')); }
+
+  header.addEventListener('click', toggle);
+  // Restore saved state (default: open)
+  // Sempre inicia recolhido — o cliente expande quando quiser
+  setGuide(false);
+})();
+
+// ══════════════════════════════════════════════════
+//  THEME TOGGLE
+// ══════════════════════════════════════════════════
+function applyTheme(theme) {
+  document.documentElement.dataset.theme = theme;
+  localStorage.setItem('apTheme', theme);
+  const isLight = theme === 'light';
+  el('themeIcon').textContent  = isLight ? '🌙' : '☀️';
+  el('themeLabel').textContent = isLight ? 'Modo Escuro' : 'Modo Claro';
+  updateUI(); // re-render chart with new colours
+}
+
+el('themeToggle').addEventListener('click', () => {
+  const current = document.documentElement.dataset.theme;
+  applyTheme(current === 'light' ? 'dark' : 'light');
+});
+
+['iParcela','iPrazo','iINCC','iAluguel','sContempl'].forEach(id =>
+  el(id).addEventListener('input', updateUI)
+);
+
+// Init: restore saved preference
+applyTheme(localStorage.getItem('apTheme') || 'dark');
+
+// ══════════════════════════════════════════════════
+//  LEAD CAPTURE → GOOGLE SHEETS
+// ══════════════════════════════════════════════════
+async function submitLead(e) {
+  e.preventDefault();
+  const btn      = el('ctaBtn');
+  const feedback = el('ctaFeedback');
+
+  const nome     = el('fNome').value.trim();
+  const email    = el('fEmail').value.trim();
+  const telefone = el('fTel').value.trim();
+
+  const sim = lastSim || {};
+  const fmt = (v) => v != null ? v.toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2}) : '—';
+  const fmtR = (v) => v != null ? v.toLocaleString('pt-BR', {style:'currency', currency:'BRL', maximumFractionDigits:0}) : '—';
+
+  const payload = {
+    timestamp:          new Date().toLocaleString('pt-BR'),
+    nome, email, telefone,
+    // Parâmetros da simulação
+    parcela:            fmtR(sim.parcela),
+    prazo:              sim.prazo ? sim.prazo + ' meses' : '—',
+    incc:               sim.incc  ? sim.incc + '% a.a.' : '—',
+    aluguel:            sim.aluguel ? sim.aluguel + '% a.m.' : '—',
+    mesContemplacao:    sim.mc    ? 'Mês ' + sim.mc : '—',
+    // Resultados
+    creditoInicial:     fmtR(sim.creditoInicial),
+    parcelaPos:         fmtR(sim.parcelaPos),
+    desembolsoTotal:    fmtR(sim.totalDesemb),
+    // Cenário 1 — Venda com ágio
+    c1CreditoContempl:  fmtR(sim.s1Cred),
+    c1AgioBruto:        fmtR(sim.s1Agio),
+    c1RetornoLiquido:   fmtR(sim.s1Rec),
+    c1ROITotal:         sim.s1ROI  != null ? fmt(sim.s1ROI)  + '%' : '—',
+    c1ROIMensal:        sim.s1ROIm != null ? fmt(sim.s1ROIm) + '% a.m.' : '—',
+    // Cenário 2 — Renda de aluguel
+    c2ValorImovel:      fmtR(sim.s2Imovel),
+    c2RendaBrutaMensal: fmtR(sim.s2Renda),
+    c2ROIMensal:        sim.s2ROIm != null ? fmt(sim.s2ROIm) + '% a.m.' : '—',
+    // Cenário 3 — Fundo Ademicon
+    c3CapitalInicial:   fmtR(sim.s3Cap),
+    c3ValorFinal:       fmtR(sim.s3Final),
+    c3GanhoLiquido:     fmtR(sim.s3Ganho),
+  };
+
+  btn.disabled = true;
+  btn.textContent = 'Enviando...';
+  feedback.textContent = '';
+  feedback.className = '';
+
+  try {
+    if (!SHEETS_URL || SHEETS_URL === 'COLE_AQUI_A_URL_DO_APPS_SCRIPT') {
+      throw new Error('URL do Apps Script não configurada.');
+    }
+    await fetch(SHEETS_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    feedback.textContent = '✅ Recebemos seus dados! Um especialista entrará em contato em breve.';
+    feedback.className = 'ok';
+    el('ctaForm').reset();
+  } catch (err) {
+    feedback.textContent = '⚠️ ' + err.message + ' Por favor, tente novamente ou entre em contato diretamente.';
+    feedback.className = 'err';
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="M22 2 15 22 11 13 2 9l20-7z"/></svg> Quero falar com um especialista';
+  }
+}
+</script>
+</body>
+</html>
