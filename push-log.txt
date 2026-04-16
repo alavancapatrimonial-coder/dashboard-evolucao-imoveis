@@ -1,0 +1,14 @@
+================================================ 
+Data/hora: 16/04/2026 18:36:49,81 
+Diretorio: C:\Users\NIKOLLAS\Dashboard Evoluá∆o Imoveis\deploy 
+================================================ 
+git version 2.53.0.windows.2
+.gitignore
+DEPLOY.md
+index.html
+push-log.txt
+README.md
+vercel.json
+_primeiro-push.bat
+_push-debug.bat
+Reinitialized existing Git repository in C:/Users/NIKOLLAS/Dashboard Evolu√ß√£o Imoveis/deploy/.git/
