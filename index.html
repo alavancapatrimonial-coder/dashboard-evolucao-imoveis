@@ -1,70 +1,72 @@
 <!DOCTYPE html>
-<html lang="pt-BR" data-theme="dark">
+<html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Simulador Consórcio Imobiliário · Alavanca Patrimonial</title>
+<title>Simulador Consórcio Imobiliário · Alavanca Patrimonial × Racon</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Mulish:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
 <style>
 /* ══════════════════════════════════════════
    DESIGN TOKENS — Dark (default)
 ══════════════════════════════════════════ */
 :root {
-  --bg-page:      #0a0f1e;
-  --bg-grad:      linear-gradient(135deg,#060912 0%,#0a0f1e 55%,#06091a 100%);
-  --bg-card:      rgba(15,23,42,.85);
-  --bg-input:     rgba(2,6,23,.65);
-  --bg-kpi:       rgba(15,23,42,.85);
-  --bg-hl:        rgba(12,18,38,.6);
-  --border-card:  rgba(148,163,184,.1);
-  --border-input: rgba(148,163,184,.16);
-  --border-met:   rgba(148,163,184,.07);
-  --border-div:   rgba(148,163,184,.09);
+  /* ─── Racon dark theme (Marinho #002E5F + Ciano #00B3E7) ─── */
+  --bg-page:      #071427;
+  --bg-grad:      linear-gradient(135deg,#04101f 0%,#071427 55%,#0a1c34 100%);
+  --bg-card:      rgba(0,46,95,.55);
+  --bg-input:     rgba(4,16,31,.7);
+  --bg-kpi:       rgba(0,46,95,.55);
+  --bg-hl:        rgba(0,46,95,.35);
+  --border-card:  rgba(0,179,231,.14);
+  --border-input: rgba(0,179,231,.22);
+  --border-met:   rgba(148,163,184,.09);
+  --border-div:   rgba(148,163,184,.1);
   --shadow-card:  none;
-  --text-1:       #f1f5f9;
-  --text-2:       #94a3b8;
-  --text-3:       #64748b;
-  --text-4:       #475569;
-  --text-foot:    #334155;
+  --text-1:       #f4f8fc;
+  --text-2:       #b7ccdf;
+  --text-3:       #8aa4bc;
+  --text-4:       #5e7a94;
+  --text-foot:    #40566d;
   /* scenario title / num colours */
-  --sc1-num:#f59e0b; --sc1-title:#fcd34d; --sc1-big:#fcd34d;
-  --sc2-num:#10b981; --sc2-title:#6ee7b7; --sc2-big:#6ee7b7;
-  --sc3-num:#6366f1; --sc3-title:#a78bfa; --sc3-big:#a78bfa;
-  /* accents */
-  --c-blue:  #60a5fa;
-  --c-purple:#a78bfa;
-  --c-orange:#fb923c;
+  --sc1-num:#FCB034; --sc1-title:#FFD150; --sc1-big:#FCB034;
+  --sc2-num:#00B3E7; --sc2-title:#5ed3f2; --sc2-big:#5ed3f2;
+  --sc3-num:#21B7EB; --sc3-title:#8ad9f2; --sc3-big:#8ad9f2;
+  /* accents (Racon palette) */
+  --c-blue:  #00B3E7;   /* Ciano Racon */
+  --c-purple:#21B7EB;   /* Turquesa arcos */
+  --c-orange:#FCB034;   /* Amarelo campanha */
   --c-green: #34d399;
   --c-red:   #f87171;
-  --c-pink:  #f472b6;
+  --c-pink:  #00B3E7;
   --c-pos:   #34d399;
   --c-neg:   #f87171;
-  --c-gold:  #fcd34d;
-  --c-teal:  #6ee7b7;
+  --c-gold:  #FCB034;
+  --c-teal:  #21B7EB;
+  --c-marinho:#002E5F;
+  --c-ciano:  #00B3E7;
   /* chart */
-  --ch-grid:    rgba(148,163,184,.04);
-  --ch-tick:    #475569;
-  --ch-tt-bg:   rgba(2,6,23,.93);
-  --ch-tt-bdr:  rgba(148,163,184,.15);
-  --ch-tt-ttl:  #94a3b8;
-  --ch-tt-body: #f1f5f9;
+  --ch-grid:    rgba(0,179,231,.06);
+  --ch-tick:    #5e7a94;
+  --ch-tt-bg:   rgba(4,16,31,.95);
+  --ch-tt-bdr:  rgba(0,179,231,.25);
+  --ch-tt-ttl:  #b7ccdf;
+  --ch-tt-body: #f4f8fc;
   /* badge / pill */
-  --badge-bg:  rgba(96,165,250,.1);
-  --badge-bdr: rgba(96,165,250,.3);
-  --badge-txt: #60a5fa;
-  --pill-pre-bg:  rgba(96,165,250,.12);
-  --pill-pre-bdr: rgba(96,165,250,.2);
-  --pill-pre-txt: #60a5fa;
+  --badge-bg:  rgba(0,179,231,.12);
+  --badge-bdr: rgba(0,179,231,.35);
+  --badge-txt: #00B3E7;
+  --pill-pre-bg:  rgba(0,179,231,.14);
+  --pill-pre-bdr: rgba(0,179,231,.28);
+  --pill-pre-txt: #00B3E7;
   --pill-pos-bg:  rgba(251,146,60,.12);
   --pill-pos-bdr: rgba(251,146,60,.2);
   --pill-pos-txt: #fb923c;
-  --incc-bg:  rgba(251,146,60,.08);
-  --incc-bdr: rgba(251,146,60,.15);
-  --incc-txt: #fb923c;
-  /* toggle button */
-  --toggle-bg:  rgba(30,41,59,.9);
-  --toggle-bdr: rgba(148,163,184,.2);
-  --toggle-txt: #94a3b8;
+  --incc-bg:  rgba(252,176,52,.1);
+  --incc-bdr: rgba(252,176,52,.22);
+  --incc-txt: #FCB034;
   /* guide block */
   --guide-bg:       rgba(99,102,241,.07);
   --guide-bdr:      rgba(99,102,241,.22);
@@ -81,129 +83,119 @@
 }
 
 /* ══════════════════════════════════════════
-   DESIGN TOKENS — Light
-══════════════════════════════════════════ */
-[data-theme="light"] {
-  --bg-page:      #edf1f8;
-  --bg-grad:      linear-gradient(135deg,#dce8fb 0%,#edf1f8 55%,#e4ecf7 100%);
-  --bg-card:      #ffffff;
-  --bg-input:     #f4f7fc;
-  --bg-kpi:       #ffffff;
-  --bg-hl:        #f0f4fb;
-  --border-card:  rgba(0,0,0,.08);
-  --border-input: rgba(0,0,0,.13);
-  --border-met:   rgba(0,0,0,.06);
-  --border-div:   rgba(0,0,0,.07);
-  --shadow-card:  0 1px 10px rgba(0,0,0,.07);
-  --text-1:       #0f172a;
-  --text-2:       #475569;
-  --text-3:       #64748b;
-  --text-4:       #94a3b8;
-  --text-foot:    #94a3b8;
-  --sc1-num:#b45309; --sc1-title:#92400e; --sc1-big:#b45309;
-  --sc2-num:#065f46; --sc2-title:#064e3b; --sc2-big:#065f46;
-  --sc3-num:#4338ca; --sc3-title:#3730a3; --sc3-big:#4338ca;
-  --c-blue:  #1d4ed8;
-  --c-purple:#6d28d9;
-  --c-orange:#c2410c;
-  --c-green: #047857;
-  --c-red:   #b91c1c;
-  --c-pink:  #be185d;
-  --c-pos:   #047857;
-  --c-neg:   #b91c1c;
-  --c-gold:  #92400e;
-  --c-teal:  #065f46;
-  --ch-grid:    rgba(0,0,0,.06);
-  --ch-tick:    #64748b;
-  --ch-tt-bg:   rgba(255,255,255,.97);
-  --ch-tt-bdr:  rgba(0,0,0,.1);
-  --ch-tt-ttl:  #64748b;
-  --ch-tt-body: #0f172a;
-  --badge-bg:  rgba(29,78,216,.08);
-  --badge-bdr: rgba(29,78,216,.2);
-  --badge-txt: #1d4ed8;
-  --pill-pre-bg:  rgba(29,78,216,.08);
-  --pill-pre-bdr: rgba(29,78,216,.2);
-  --pill-pre-txt: #1d4ed8;
-  --pill-pos-bg:  rgba(194,65,12,.08);
-  --pill-pos-bdr: rgba(194,65,12,.2);
-  --pill-pos-txt: #c2410c;
-  --incc-bg:  rgba(194,65,12,.07);
-  --incc-bdr: rgba(194,65,12,.18);
-  --incc-txt: #c2410c;
-  --toggle-bg:  #ffffff;
-  --toggle-bdr: rgba(0,0,0,.14);
-  --toggle-txt: #475569;
-  --guide-bg:       rgba(79,70,229,.05);
-  --guide-bdr:      rgba(79,70,229,.18);
-  --guide-tag-bg:   rgba(79,70,229,.1);
-  --guide-tag-txt:  #4338ca;
-  --guide-step-bg:  #f8f9ff;
-  --guide-step-bdr: rgba(79,70,229,.12);
-  --guide-param-bg: rgba(180,83,9,.06);
-  --guide-param-bdr:rgba(180,83,9,.2);
-  --guide-param-txt:#92400e;
-  --guide-sc1:      rgba(180,83,9,.07);
-  --guide-sc2:      rgba(6,95,70,.07);
-  --guide-sc3:      rgba(67,56,202,.07);
-}
-
-/* ══════════════════════════════════════════
-   BASE
+   BASE (Racon dark — modo único)
 ══════════════════════════════════════════ */
 *{margin:0;padding:0;box-sizing:border-box}
-html{transition:background .3s}
+html{scroll-behavior:smooth;background:#04101f}
 
 body{
-  font-family:'Segoe UI',system-ui,sans-serif;
+  /* FS Elliot é fonte comercial da Racon → fallback aberto: Mulish (Google Fonts) */
+  font-family:'Mulish','FS Elliot','Segoe UI',system-ui,sans-serif;
   background: var(--bg-grad);
   background-attachment: fixed;
   min-height:100vh;
   color:var(--text-1);
   padding:16px;
-  transition: color .25s;
+  position:relative;
+  overflow-x:hidden;
 }
 
-.container{max-width:1440px;margin:0 auto}
-
-/* ── TOGGLE BUTTON ─────────────────────── */
-.theme-btn{
-  position:fixed;top:18px;right:18px;z-index:1000;
-  display:flex;align-items:center;gap:7px;
-  padding:8px 16px;border-radius:22px;
-  border:1px solid var(--toggle-bdr);
-  background:var(--toggle-bg);
-  color:var(--toggle-txt);
-  cursor:pointer;font-size:.78rem;font-weight:600;
-  box-shadow:0 2px 12px rgba(0,0,0,.18);
-  transition:all .2s;
+/* Watermark decorativo do símbolo Racon (arcos + círculo) — canto direito superior */
+body::before{
+  content:'';
+  position:fixed;top:-180px;right:-180px;
+  width:720px;height:720px;
+  background:url('assets/racon-simbolo.png') center/contain no-repeat;
+  opacity:.045;
+  filter:brightness(0) invert(1);
+  pointer-events:none;z-index:0;
+  transform:rotate(-8deg);
 }
-.theme-btn:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(0,0,0,.22)}
+/* Segundo watermark — canto inferior esquerdo, menor */
+body::after{
+  content:'';
+  position:fixed;bottom:-220px;left:-220px;
+  width:620px;height:620px;
+  background:url('assets/racon-simbolo.png') center/contain no-repeat;
+  opacity:.03;
+  filter:brightness(0) invert(1);
+  pointer-events:none;z-index:0;
+  transform:rotate(18deg);
+}
+/* Halos de cor Racon para dar profundidade ao fundo */
+html::before{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(1200px 800px at 15% -10%, rgba(0,179,231,.14), transparent 55%),
+    radial-gradient(900px 700px at 90% 110%, rgba(0,46,95,.55), transparent 60%),
+    radial-gradient(700px 500px at 50% 50%, rgba(33,183,235,.05), transparent 70%);
+}
+
+.container{max-width:1440px;margin:0 auto;position:relative;z-index:1}
 
 /* ── HEADER ────────────────────────────── */
-.header{text-align:center;padding:28px 0 20px}
-.header h1{
-  font-size:2rem;font-weight:800;letter-spacing:-.5px;
-  background:linear-gradient(135deg,var(--c-blue),var(--c-purple),var(--c-pink));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+.header{text-align:center;padding:36px 0 24px;position:relative}
+
+/* Logo Racon centralizada — sem caixa, com halo sutil (elemento hero) */
+.brand-hero{
+  display:flex;justify-content:center;align-items:center;
+  margin:0 auto 22px;position:relative;
 }
-.header p{color:var(--text-3);margin-top:6px;font-size:.9rem}
-.badge-ap{
-  display:inline-block;margin-top:8px;
-  padding:3px 14px;border-radius:20px;
-  background:var(--badge-bg);border:1px solid var(--badge-bdr);
-  color:var(--badge-txt);font-size:.75rem;font-weight:700;letter-spacing:.06em;
-  transition: background .25s, color .25s, border-color .25s;
+.brand-hero img{
+  height:82px;width:auto;display:block;
+  filter:drop-shadow(0 8px 32px rgba(0,179,231,.35))
+         drop-shadow(0 2px 6px rgba(0,0,0,.4));
+}
+.brand-hero::before{
+  content:'';position:absolute;top:50%;left:50%;
+  width:340px;height:180px;
+  transform:translate(-50%,-50%);
+  background:radial-gradient(ellipse at center, rgba(0,179,231,.22) 0%, transparent 70%);
+  z-index:-1;pointer-events:none;
 }
 
-/* ── CARDS ─────────────────────────────── */
+.header h1{
+  font-size:2.3rem;font-weight:900;letter-spacing:-.6px;line-height:1.1;
+  background:linear-gradient(135deg,#00B3E7 0%,#5ed3f2 40%,#ffffff 90%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  margin-bottom:8px;
+}
+.header p{
+  color:var(--text-2);margin-top:4px;font-size:1rem;font-weight:400;
+  max-width:640px;margin-left:auto;margin-right:auto;line-height:1.5;
+}
+
+/* Chancelas institucionais em linha (Member Rands · Feito por Alavanca) */
+.header-chancelas{
+  display:flex;justify-content:center;align-items:center;gap:22px;flex-wrap:wrap;
+  margin-top:18px;
+}
+.chancela{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--text-3);font-weight:700;
+}
+.chancela::before{content:'▎';color:var(--c-ciano);font-size:.9rem;line-height:1}
+.chancela strong{color:var(--text-1);font-weight:800;letter-spacing:.18em;margin-left:2px}
+
+/* ── CARDS (glass premium Racon) ────────── */
 .card{
-  background:var(--bg-card);
-  backdrop-filter:blur(20px);
+  background:
+    linear-gradient(180deg, rgba(0,179,231,.04) 0%, transparent 40%),
+    var(--bg-card);
+  backdrop-filter:blur(24px) saturate(140%);
+  -webkit-backdrop-filter:blur(24px) saturate(140%);
   border:1px solid var(--border-card);
-  border-radius:16px;padding:20px;margin-bottom:16px;
-  box-shadow:var(--shadow-card);
-  transition:background .25s,border-color .25s,box-shadow .25s;
+  border-radius:18px;padding:22px;margin-bottom:16px;
+  box-shadow:
+    0 1px 0 rgba(255,255,255,.04) inset,
+    0 20px 40px -20px rgba(0,0,0,.45);
+  position:relative;
+}
+.card::before{
+  content:'';position:absolute;top:0;left:24px;right:24px;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(0,179,231,.4),transparent);
+  border-radius:1px;
 }
 .card-title{
   font-size:.72rem;font-weight:700;text-transform:uppercase;
@@ -213,17 +205,31 @@ body{
 .card-title::after{content:'';flex:1;height:1px;background:var(--border-div)}
 
 /* ── INPUTS ────────────────────────────── */
-.inputs-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px}
-.input-group{display:flex;flex-direction:column;gap:6px}
-.input-group label{font-size:.78rem;color:var(--text-2);font-weight:500;transition:color .25s}
+.inputs-grid{
+  display:grid;
+  grid-template-columns:repeat(5, 1fr);
+  gap:16px;
+  align-items:end;
+}
+@media(max-width:1100px){.inputs-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:700px) {.inputs-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:440px) {.inputs-grid{grid-template-columns:1fr}}
+.input-group{
+  display:flex;flex-direction:column;justify-content:flex-end;gap:6px;
+}
+.input-group label{
+  font-size:.78rem;color:var(--text-2);font-weight:600;
+  min-height:2.6em;         /* labels de linhas duplas alinham com os de linha única */
+  display:flex;align-items:flex-end;line-height:1.3;
+}
 .input-group input{
   background:var(--bg-input);
   border:1px solid var(--border-input);
   border-radius:10px;padding:10px 14px;
   color:var(--text-1);font-size:.95rem;outline:none;width:100%;
-  transition:border-color .2s,box-shadow .2s,background .25s,color .25s;
+  transition:border-color .2s,box-shadow .2s;
 }
-.input-group input:focus{border-color:var(--c-blue);box-shadow:0 0 0 3px rgba(96,165,250,.12)}
+.input-group input:focus{border-color:var(--c-ciano);box-shadow:0 0 0 3px rgba(0,179,231,.18)}
 
 .slider-wrap{margin-top:20px}
 .slider-wrap label{font-size:.78rem;color:var(--text-2);font-weight:500;display:block;margin-bottom:10px;transition:color .25s}
@@ -240,24 +246,24 @@ body{
 @media(max-width:1100px){.kpi-row{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:600px) {.kpi-row{grid-template-columns:repeat(2,1fr)}}
 .kpi{
-  background:var(--bg-kpi);
+  background:
+    linear-gradient(180deg, rgba(0,179,231,.05) 0%, transparent 60%),
+    var(--bg-kpi);
+  backdrop-filter:blur(20px);
   border:1px solid var(--border-card);
-  border-radius:14px;padding:14px;text-align:center;
-  box-shadow:var(--shadow-card);
-  transition:background .25s,border-color .25s,box-shadow .25s;
+  border-radius:14px;padding:16px 14px;text-align:center;
+  box-shadow:
+    0 1px 0 rgba(255,255,255,.05) inset,
+    0 10px 30px -12px rgba(0,0,0,.45);
+  transition:transform .25s, border-color .25s, box-shadow .25s;
 }
-.kpi.blue  {border-color:rgba(96,165,250,.3)}
-.kpi.purple{border-color:rgba(167,139,250,.3)}
-.kpi.orange{border-color:rgba(251,146,60,.3)}
-.kpi.green {border-color:rgba(52,211,153,.3)}
-.kpi.red   {border-color:rgba(248,113,113,.3)}
-.kpi.pink  {border-color:rgba(244,114,182,.3)}
-[data-theme="light"] .kpi.blue  {border-color:rgba(29,78,216,.25)}
-[data-theme="light"] .kpi.purple{border-color:rgba(109,40,217,.25)}
-[data-theme="light"] .kpi.orange{border-color:rgba(194,65,12,.25)}
-[data-theme="light"] .kpi.green {border-color:rgba(4,120,87,.25)}
-[data-theme="light"] .kpi.red   {border-color:rgba(185,28,28,.25)}
-[data-theme="light"] .kpi.pink  {border-color:rgba(190,24,93,.25)}
+.kpi:hover{transform:translateY(-2px);box-shadow:0 1px 0 rgba(255,255,255,.06) inset, 0 16px 32px -12px rgba(0,179,231,.25)}
+.kpi.blue  {border-color:rgba(0,179,231,.35)}
+.kpi.purple{border-color:rgba(33,183,235,.35)}
+.kpi.orange{border-color:rgba(252,176,52,.35)}
+.kpi.green {border-color:rgba(52,211,153,.35)}
+.kpi.red   {border-color:rgba(248,113,113,.35)}
+.kpi.pink  {border-color:rgba(0,179,231,.35)}
 
 .kpi-label{font-size:.6rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text-4);margin-bottom:5px;font-weight:600;transition:color .25s}
 .kpi-val{font-size:1.1rem;font-weight:800;line-height:1;transition:color .25s}
@@ -281,17 +287,23 @@ body{
 @media(max-width:900px){.scenarios-grid{grid-template-columns:1fr}}
 
 .sc-card{
-  background:var(--bg-card);
+  background:
+    linear-gradient(180deg, rgba(0,179,231,.04) 0%, transparent 40%),
+    var(--bg-card);
+  backdrop-filter:blur(24px) saturate(140%);
   border:1px solid var(--border-card);
-  border-radius:16px;padding:22px;
+  border-radius:18px;padding:24px 22px;
   position:relative;overflow:hidden;
-  box-shadow:var(--shadow-card);
-  transition:background .25s,border-color .25s,box-shadow .25s;
+  box-shadow:
+    0 1px 0 rgba(255,255,255,.05) inset,
+    0 20px 40px -18px rgba(0,0,0,.5);
+  transition:transform .25s, box-shadow .25s;
 }
+.sc-card:hover{transform:translateY(-3px)}
 .sc-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:16px 16px 0 0}
-.sc1::before{background:linear-gradient(90deg,#f59e0b,#fcd34d)}
-.sc2::before{background:linear-gradient(90deg,#10b981,#6ee7b7)}
-.sc3::before{background:linear-gradient(90deg,#6366f1,#a78bfa)}
+.sc1::before{background:linear-gradient(90deg,#FCB034,#FFD150)}
+.sc2::before{background:linear-gradient(90deg,#00B3E7,#5ed3f2)}
+.sc3::before{background:linear-gradient(90deg,#002E5F,#00B3E7)}
 
 .sc-num{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;margin-bottom:2px;transition:color .25s}
 .sc1 .sc-num{color:var(--sc1-num)}
@@ -433,21 +445,17 @@ body{
   margin-top:32px;
   border-radius:18px;
   padding:48px 40px 44px;
-  background:linear-gradient(135deg,rgba(96,165,250,.08) 0%,rgba(167,139,250,.08) 50%,rgba(52,211,153,.06) 100%);
-  border:1px solid rgba(148,163,184,.13);
+  background:linear-gradient(135deg,rgba(0,46,95,.35) 0%,rgba(0,179,231,.12) 55%,rgba(33,183,235,.08) 100%);
+  border:1px solid rgba(0,179,231,.22);
   text-align:center;
   position:relative;
   overflow:hidden;
   transition:background .3s,border-color .3s;
 }
-[data-theme="light"] .cta-block{
-  background:linear-gradient(135deg,rgba(37,99,235,.06) 0%,rgba(109,40,217,.06) 50%,rgba(5,150,105,.05) 100%);
-  border:1px solid rgba(37,99,235,.15);
-}
 .cta-block::before{
   content:'';
   position:absolute;inset:0;
-  background:radial-gradient(ellipse 60% 50% at 50% 0%,rgba(96,165,250,.07),transparent);
+  background:radial-gradient(ellipse 60% 50% at 50% 0%,rgba(0,179,231,.1),transparent);
   pointer-events:none;
 }
 .cta-eyebrow{
@@ -484,19 +492,19 @@ body{
 }
 .cta-field input::placeholder{color:var(--text-4);}
 .cta-field input:focus{
-  border-color:var(--c-blue);
-  box-shadow:0 0 0 3px rgba(96,165,250,.15);
+  border-color:var(--c-ciano);
+  box-shadow:0 0 0 3px rgba(0,179,231,.2);
 }
 .cta-btn{
   display:inline-flex;align-items:center;gap:10px;
-  background:linear-gradient(135deg,#2563eb,#7c3aed);
+  background:linear-gradient(135deg,#002E5F 0%,#00B3E7 100%);
   color:#fff;border:none;border-radius:12px;
   padding:15px 36px;font-size:1rem;font-weight:700;
   cursor:pointer;letter-spacing:.03em;
-  box-shadow:0 4px 24px rgba(37,99,235,.35);
+  box-shadow:0 4px 24px rgba(0,179,231,.35);
   transition:transform .15s,box-shadow .15s,opacity .15s;
 }
-.cta-btn:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(37,99,235,.45);}
+.cta-btn:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(0,179,231,.5);}
 .cta-btn:active{transform:translateY(0);}
 .cta-btn:disabled{opacity:.55;cursor:not-allowed;transform:none;}
 .cta-btn svg{width:18px;height:18px;flex-shrink:0;}
@@ -507,23 +515,56 @@ body{
 }
 #ctaFeedback.ok{color:var(--c-green);}
 #ctaFeedback.err{color:var(--c-red);}
+
+/* ── SEGURO OPCIONAL (checkbox) ─────────────── */
+.seguro-toggle{
+  grid-column:1/-1;
+  display:flex;align-items:center;gap:12px;
+  padding:12px 16px;border-radius:12px;
+  background:var(--bg-input);border:1px solid var(--border-input);
+  transition:all .2s;
+}
+.seguro-toggle input[type="checkbox"]{
+  appearance:none;-webkit-appearance:none;
+  width:42px;height:24px;border-radius:20px;
+  background:rgba(148,163,184,.25);border:none;cursor:pointer;
+  position:relative;transition:background .2s;flex-shrink:0;
+}
+.seguro-toggle input[type="checkbox"]::before{
+  content:'';position:absolute;top:2px;left:2px;
+  width:20px;height:20px;border-radius:50%;
+  background:#fff;transition:transform .2s;
+}
+.seguro-toggle input[type="checkbox"]:checked{background:var(--c-ciano)}
+.seguro-toggle input[type="checkbox"]:checked::before{transform:translateX(18px)}
+.seguro-toggle label{
+  font-size:.85rem;font-weight:600;color:var(--text-1);
+  cursor:pointer;flex:1;line-height:1.3;
+}
+.seguro-toggle .seg-tag{
+  font-size:.68rem;font-weight:700;letter-spacing:.06em;
+  color:var(--c-ciano);text-transform:uppercase;margin-left:8px;
+}
+.seguro-toggle .seg-desc{
+  font-size:.72rem;color:var(--text-3);margin-top:2px;font-weight:400;
+}
 </style>
 </head>
 <body>
-
-<!-- TOGGLE BUTTON -->
-<button class="theme-btn" id="themeToggle">
-  <span id="themeIcon">☀️</span>
-  <span id="themeLabel">Modo Claro</span>
-</button>
 
 <div class="container">
 
 <!-- HEADER -->
 <div class="header">
+  <div class="brand-hero">
+    <img src="assets/racon-logo.png" alt="Racon Consórcios">
+  </div>
   <h1>Simulador de Consórcio Imobiliário</h1>
   <p>Projete a evolução da sua cota e compare cenários de resultado</p>
-  <div class="badge-ap">Feito por ALAVANCA PATRIMONIAL</div>
+  <div class="header-chancelas">
+    <div class="chancela">Member Rands · <strong>Grupo Randon</strong></div>
+    <div class="chancela">Feito por · <strong>Alavanca Patrimonial</strong></div>
+  </div>
 </div>
 
 <!-- GUIDE BLOCK -->
@@ -587,6 +628,15 @@ body{
           <div class="guide-step">
             <div class="step-num">5</div>
             <div class="step-content">
+              <div class="step-field">Taxa Fundo Administradora (% a.m.) — Cenário 3</div>
+              <div class="step-desc">Rendimento mensal do fundo da administradora onde o crédito contemplado pode ser aplicado. Incide sobre o <strong>capital total da carta</strong>, não sobre o valor pago. Ajuste conforme a taxa vigente informada pela administradora.</div>
+              <span class="step-tip">Padrão de mercado: 0,9% a.m. · Ajuste conforme a taxa atual do fundo</span>
+            </div>
+          </div>
+
+          <div class="guide-step">
+            <div class="step-num">6</div>
+            <div class="step-content">
               <div class="step-field">Mês de Contemplação (slider)</div>
               <div class="step-desc">Arraste para simular em qual mês você será contemplado — seja por sorteio ou por lance. Quanto antes a contemplação, maior será a parcela pós-contemplação. Teste diferentes cenários para encontrar o equilíbrio ideal para o seu perfil.</div>
               <span class="step-tip">Lance competitivo hoje: entre o mês 6 e o mês 36</span>
@@ -619,8 +669,8 @@ body{
           <div class="sc-guide-item s3">
             <span class="sc-guide-icon">📈</span>
             <div>
-              <div class="sc-guide-name">Cenário 3 — Fundo Ademicon (0,9% a.m.)</div>
-              <div class="sc-guide-desc">Para quem não precisa do imóvel imediatamente e quer que o crédito se <strong>valorize dentro do próprio consórcio</strong>. O rendimento de 0,9% a.m. incide sobre o capital total da carta, não sobre o valor pago — criando uma alavancagem financeira.</div>
+              <div class="sc-guide-name">Cenário 3 — Fundo da Administradora (configurável)</div>
+              <div class="sc-guide-desc">Para quem não precisa do imóvel imediatamente e quer que o crédito se <strong>valorize dentro do próprio consórcio</strong>. O rendimento (padrão 0,9% a.m., ajustável no campo "Taxa Fundo Administradora") incide sobre o capital total da carta, não sobre o valor pago — criando uma alavancagem financeira.</div>
               <div class="sc-guide-tag">📌 Perfil: investidor financeiro / reserva estratégica</div>
             </div>
           </div>
@@ -637,7 +687,7 @@ body{
   <div class="inputs-grid">
     <div class="input-group">
       <label>Parcela Inicial (R$)</label>
-      <input type="number" id="iParcela" placeholder="Ex: 1.500" min="200" max="100000" step="100">
+      <input type="text" id="iParcela" placeholder="R$ 0,00" inputmode="numeric" autocomplete="off">
     </div>
     <div class="input-group">
       <label>Prazo do Grupo (meses)</label>
@@ -648,8 +698,21 @@ body{
       <input type="number" id="iINCC" value="6" min="0" max="20" step="0.5">
     </div>
     <div class="input-group">
-      <label>Taxa de Aluguel Mensal — Cen. 2 (%)</label>
+      <label>Taxa Aluguel Mensal · Cen. 2 (%)</label>
       <input type="number" id="iAluguel" value="0.70" min="0.1" max="3" step="0.05">
+    </div>
+    <div class="input-group">
+      <label>Taxa Fundo Administradora · Cen. 3 (% a.m.)</label>
+      <input type="number" id="iFundo" value="0.90" min="0.1" max="3" step="0.05">
+    </div>
+    <!-- SEGURO OPCIONAL — multiplicador 0,0496% sobre o crédito -->
+    <div class="seguro-toggle">
+      <input type="checkbox" id="iSeguro">
+      <label for="iSeguro">
+        Incluir Seguro (MIP/DFI)
+        <span class="seg-tag">+0,0496% a.m.</span>
+        <div class="seg-desc">Quando ativo, o seguro incide sobre o crédito atualizado e é somado à parcela mensal (pré e pós).</div>
+      </label>
     </div>
   </div>
   <div class="slider-wrap">
@@ -673,7 +736,7 @@ body{
   <div class="kpi blue">
     <div class="kpi-label">Crédito Inicial</div>
     <div class="kpi-val" id="kC0">—</div>
-    <div class="kpi-sub">Carta de crédito (parcela ÷ 0,3377%)</div>
+    <div class="kpi-sub" id="kC0Sub">Carta de crédito (parcela ÷ 0,3382%)</div>
   </div>
   <div class="kpi red" style="display:none">
     <div class="kpi-label">Saldo Devedor Inicial</div>
@@ -706,10 +769,10 @@ body{
 <div class="card">
   <div class="card-title">Evolução da Cota ao Longo do Tempo</div>
   <div class="chart-legend">
-    <div class="legend-item"><div class="legend-line" style="background:#60a5fa"></div>Carta de Crédito (INCC anual)</div>
+    <div class="legend-item"><div class="legend-line" style="background:#00B3E7"></div>Carta de Crédito (INCC anual)</div>
     <div class="legend-item"><div class="legend-line dashed"></div>Desembolso Acumulado</div>
-    <div class="legend-item"><div class="legend-line" style="background:#f472b6"></div>Parcela Mensal (eixo dir.)</div>
-    <div class="legend-item"><div class="legend-line" style="background:#facc15;height:2px"></div>Contemplação</div>
+    <div class="legend-item"><div class="legend-line" style="background:#FCB034"></div>Parcela Mensal (eixo dir.)</div>
+    <div class="legend-item"><div class="legend-line" style="background:#FFD150;height:2px"></div>Contemplação</div>
   </div>
   <div class="chart-wrap"><canvas id="chart"></canvas></div>
 </div>
@@ -727,7 +790,7 @@ body{
   <div class="sc-card sc1">
     <div class="sc-num">Cenário 1</div>
     <div class="sc-title">Venda da Cota</div>
-    <div class="sc-sub">Venda para a Ademicon com ágio bruto de 40% sobre o crédito atualizado. Desembolso = apenas parcelas pré-contemplação.</div>
+    <div class="sc-sub">Venda da cota Racon com ágio bruto de 40% sobre o crédito atualizado. Desembolso = apenas parcelas pré-contemplação.</div>
     <div class="metric"><span class="m-label">Crédito Atualizado (Contemplação)</span><span class="m-val" id="s1Cred">—</span></div>
     <div class="metric"><span class="m-label">Ágio Bruto (40% sobre crédito)</span><span class="m-val pos" id="s1Agio">—</span></div>
     <div class="metric"><span class="m-label">Desembolso Total Pré-Contemplação</span><span class="m-val" id="s1Desemb">—</span></div>
@@ -763,12 +826,12 @@ body{
   <!-- CENÁRIO 3 -->
   <div class="sc-card sc3">
     <div class="sc-num">Cenário 3</div>
-    <div class="sc-title">Fundo Ademicon</div>
-    <div class="sc-sub">Crédito investido no fundo a 0,9% a.m. sobre o capital total da carta. Reajuste via INCC 6% a.a. Desembolso = pré + pós.</div>
+    <div class="sc-title">Fundo Racon</div>
+    <div class="sc-sub" id="s3Sub">Crédito investido no fundo a 0,9% a.m. sobre o capital total da carta. Reajuste via INCC. Desembolso = pré + pós.</div>
     <div class="metric"><span class="m-label">Capital da Carta (contemplação)</span><span class="m-val" id="s3Cap">—</span></div>
-    <div class="metric"><span class="m-label">Rendimento Mensal Inicial (0,9%)</span><span class="m-val pos" id="s3Rend">—</span></div>
+    <div class="metric"><span class="m-label" id="s3RendLbl">Rendimento Mensal Inicial (0,9%)</span><span class="m-val pos" id="s3Rend">—</span></div>
     <div class="metric"><span class="m-label">Meses no Fundo até Fim do Grupo</span><span class="m-val" id="s3Meses">—</span></div>
-    <div class="metric"><span class="m-label">Valor Final do Crédito (0,9% a.m.)</span><span class="m-val pos" id="s3Final">—</span></div>
+    <div class="metric"><span class="m-label" id="s3FinalLbl">Valor Final do Crédito (0,9% a.m.)</span><span class="m-val pos" id="s3Final">—</span></div>
     <div class="sc-divider"></div>
     <div class="metric"><span class="m-label">Desembolso Total (pré + pós c/ INCC)</span><span class="m-val" id="s3Desemb">—</span></div>
     <div class="metric"><span class="m-label">Ganho Líquido</span><span class="m-val pos" id="s3Ganho">—</span></div>
@@ -811,12 +874,12 @@ body{
 </div>
 
 <div class="footer-note">
-  * Simulação educacional. Valores sujeitos a condições reais do grupo, INCC vigente e regulamento da Ademicon.<br>
-  <strong>Crédito inicial:</strong> Parcela ÷ 0,3377% &nbsp;|&nbsp;
+  * Simulação educacional. Valores sujeitos a condições reais do grupo, INCC vigente e regulamento da Racon Consórcios.<br>
+  <strong>Crédito inicial:</strong> Parcela ÷ 0,3382% (÷ 0,3878% com seguro ativo) &nbsp;|&nbsp;
   <strong>Saldo devedor:</strong> Crédito × 1,24 (incl. 24% taxa adm.) &nbsp;|&nbsp;
-  <strong>Pré-contemplação:</strong> Parcela = Crédito × 0,3377% (INCC anual sobre o crédito) &nbsp;|&nbsp;
-  <strong>Pós-contemplação:</strong> Parcela = Saldo ÷ Prazo Restante (recalcula a cada INCC anual) &nbsp;|&nbsp;
-  <strong>Cenário 3:</strong> Fundo 0,9% a.m. sobre capital total da carta
+  <strong>Pré-contemplação:</strong> Parcela = Crédito × 0,3382% (+ 0,0496% se seguro ativo — INCC anual sobre o crédito) &nbsp;|&nbsp;
+  <strong>Pós-contemplação:</strong> Parcela = Saldo ÷ Prazo Restante + seguro sobre crédito (recalcula a cada INCC anual) &nbsp;|&nbsp;
+  <strong>Cenário 3:</strong> Fundo configurável (padrão 0,9% a.m.) sobre capital total da carta
 </div>
 
 </div><!-- /container -->
@@ -826,6 +889,28 @@ const R  = v  => v.toLocaleString('pt-BR',{style:'currency',currency:'BRL',maxim
 const P  = (v,d=2) => v.toFixed(d).replace('.',',') + '%';
 const el = id => document.getElementById(id);
 
+// ══════════════════════════════════════════════════
+//  MÁSCARA DE MOEDA BR — "R$ 1.500,00"
+// ══════════════════════════════════════════════════
+// Retorna o número em reais a partir de uma string mascarada
+const parseBRL = (str) => {
+  if (!str) return 0;
+  const digits = String(str).replace(/\D/g, '');
+  return digits ? parseInt(digits, 10) / 100 : 0;
+};
+// Formata um número (em reais) na máscara BR completa: "R$ 0.000,00"
+const formatBRL = (num) => {
+  return (num || 0).toLocaleString('pt-BR', {
+    style: 'currency', currency: 'BRL',
+    minimumFractionDigits: 2, maximumFractionDigits: 2
+  });
+};
+// Aplica máscara enquanto o usuário digita (só reconhece dígitos)
+function applyCurrencyMask(inputEl) {
+  const raw = inputEl.value.replace(/\D/g, '');
+  inputEl.value = raw ? formatBRL(parseInt(raw, 10) / 100) : '';
+}
+
 // URL do Google Apps Script Web App — endpoint de captação de leads
 const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbw8Gl_5HXejq1AYWjUcvViZYVhPORCpIwjklJxoX1QaCtQylqNrAfJgqm0p_Utmeq4Y/exec';
 
@@ -834,34 +919,49 @@ let lastSim = null; // armazena último resultado para envio no lead
 // ══════════════════════════════════════════════════
 //  SIMULAÇÃO PRINCIPAL
 // ══════════════════════════════════════════════════
-function simulate(parcela, prazo, inccAA, aluguelPct, mc) {
-  const TAXA_PRE  = 0.003377;
-  const TAXA_ADM  = 0.24;
-  const TAXA_FUND = 0.009;
-  const inccF     = inccAA / 100;
+// TAXA_PRE     : 0,3382% — fator mensal Racon (parcela pré ÷ crédito)
+// TAXA_SEGURO  : 0,0496% — MIP/DFI opcional (multiplicador sobre o crédito)
+// TAXA_ADM     : 24%     — taxa de administração diluída no saldo
+// fundoTaxaAA  : ex. 0,9% a.m. — rendimento mensal do Fundo (agora configurável)
+function simulate(parcela, prazo, inccAA, aluguelPct, mc, seguroAtivo, fundoTaxaAM) {
+  const TAXA_PRE    = 0.003382;
+  const TAXA_SEGURO = 0.000496;
+  const TAXA_ADM    = 0.24;
+  const TAXA_FUND   = (fundoTaxaAM != null ? fundoTaxaAM : 0.9) / 100;
+  const inccF       = inccAA / 100;
+  const segF        = seguroAtivo ? TAXA_SEGURO : 0;
 
-  const c0        = parcela / TAXA_PRE;
-  const saldoInic = c0 * (1 + TAXA_ADM);
+  // A parcela informada pelo cliente inclui o seguro (quando ativo),
+  // então o divisor é (TAXA_PRE + TAXA_SEGURO). Sem seguro é só TAXA_PRE.
+  const fatorParcela = TAXA_PRE + segF;
+  const c0           = parcela / fatorParcela;
+  const saldoInic    = c0 * (1 + TAXA_ADM);
 
   const data = [];
   data.push({ m:0, credit:c0, saldo:saldoInic, parc:0, cumul:0, phase:'pre' });
 
-  let credit = c0, totalPaidPre = 0;
+  let credit = c0, totalPaidPre = 0, totalAmortPre = 0;
 
   for (let m = 1; m <= mc; m++) {
     if (m % 12 === 0) credit *= (1 + inccF);
-    const parc = credit * TAXA_PRE;
-    totalPaidPre += parc;
-    const saldo = Math.max(0, credit * (1 + TAXA_ADM) - totalPaidPre);
+    const parcAdm = credit * TAXA_PRE;
+    const parcSeg = credit * segF;
+    const parc    = parcAdm + parcSeg;
+    totalPaidPre  += parc;
+    totalAmortPre += parcAdm;   // apenas a parte que abate o saldo devedor
+    // Saldo devedor considera só a amortização (o seguro é despesa, não amortiza)
+    const saldo = Math.max(0, credit * (1 + TAXA_ADM) - totalAmortPre);
     data.push({ m, credit, saldo, parc, cumul: totalPaidPre, phase:'pre' });
   }
 
   const creditContempl = credit;
-  const saldoContempl  = Math.max(0, creditContempl * (1 + TAXA_ADM) - totalPaidPre);
+  const saldoContempl  = Math.max(0, creditContempl * (1 + TAXA_ADM) - totalAmortPre);
   const mesesRest      = prazo - mc;
 
   let postSaldo = saldoContempl;
-  let postParc  = mesesRest > 0 ? postSaldo / mesesRest : 0;
+  let postAmort = mesesRest > 0 ? postSaldo / mesesRest : 0;
+  let postSeg   = creditContempl * segF;
+  let postParc  = postAmort + postSeg;
   const parcelaPos0 = postParc;
   let totalPaidPos = 0;
   let chartCredit  = creditContempl;
@@ -871,10 +971,12 @@ function simulate(parcela, prazo, inccAA, aluguelPct, mc) {
       chartCredit *= (1 + inccF);
       postSaldo   *= (1 + inccF);
       const rem    = prazo - m + 1;
-      postParc     = rem > 0 ? postSaldo / rem : postSaldo;
+      postAmort    = rem > 0 ? postSaldo / rem : postSaldo;
+      postSeg      = chartCredit * segF;
+      postParc     = postAmort + postSeg;
     }
     totalPaidPos += postParc;
-    postSaldo     = Math.max(0, postSaldo - postParc);
+    postSaldo     = Math.max(0, postSaldo - postAmort);
     data.push({ m, credit:chartCredit, saldo:postSaldo, parc:postParc,
                 cumul: totalPaidPre + totalPaidPos, phase:'pos' });
   }
@@ -929,29 +1031,28 @@ const contemplPlugin = {
     ctx.save();
     ctx.setLineDash([6,4]);
     ctx.lineWidth = 2;
-    ctx.strokeStyle = 'rgba(250,204,21,.9)';
+    ctx.strokeStyle = 'rgba(255,209,80,.95)';
     ctx.beginPath(); ctx.moveTo(px, top); ctx.lineTo(px, bottom); ctx.stroke();
     ctx.setLineDash([]);
-    ctx.fillStyle = 'rgba(250,204,21,.95)';
-    ctx.font = 'bold 11px Segoe UI, sans-serif';
+    ctx.fillStyle = 'rgba(255,209,80,1)';
+    ctx.font = 'bold 11px Mulish, "FS Elliot", Segoe UI, sans-serif';
     ctx.fillText('▲ Contemplação', px - 58, top + 14);
     ctx.restore();
   }
 };
 
 function chartTheme() {
-  const light = document.documentElement.dataset.theme === 'light';
   return {
-    grid:    light ? 'rgba(0,0,0,.07)'           : 'rgba(148,163,184,.04)',
-    tick:    light ? '#64748b'                   : '#475569',
-    ttBg:    light ? 'rgba(255,255,255,.97)'     : 'rgba(2,6,23,.93)',
-    ttBdr:   light ? 'rgba(0,0,0,.1)'            : 'rgba(148,163,184,.15)',
-    ttTitle: light ? '#64748b'                   : '#94a3b8',
-    ttBody:  light ? '#0f172a'                   : '#f1f5f9',
-    cFill:   light ? 'rgba(29,78,216,.06)'       : 'rgba(96,165,250,.05)',
-    oFill:   light ? 'rgba(194,65,12,.05)'       : 'rgba(251,146,60,.04)',
-    pFill:   light ? 'rgba(190,24,93,.07)'       : 'rgba(244,114,182,.07)',
-    tickY2:  light ? '#be185d'                   : '#f472b6',
+    grid:    'rgba(0,179,231,.06)',
+    tick:    '#8aa4bc',
+    ttBg:    'rgba(4,16,31,.96)',
+    ttBdr:   'rgba(0,179,231,.28)',
+    ttTitle: '#b7ccdf',
+    ttBody:  '#f4f8fc',
+    cFill:   'rgba(0,179,231,.1)',
+    oFill:   'rgba(252,176,52,.05)',
+    pFill:   'rgba(252,176,52,.1)',
+    tickY2:  '#FCB034',
   };
 }
 
@@ -978,14 +1079,14 @@ function renderChart(res, mc, prazo) {
       labels,
       datasets: [
         { label:'Carta de Crédito', data:credArr,
-          borderColor:'#60a5fa', backgroundColor:t.cFill,
+          borderColor:'#00B3E7', backgroundColor:t.cFill,
           borderWidth:2.5, pointRadius:0, fill:true, tension:0, yAxisID:'y' },
         { label:'Desembolso Acumulado', data:cumulArr,
           borderColor:'#34d399', borderDash:[6,3],
           borderWidth:2, pointRadius:0, fill:false, tension:0.15, yAxisID:'y',
           creditRef: credArr },
         { label:'Parcela Mensal', data:parcArr,
-          borderColor:'#f472b6', backgroundColor:t.pFill,
+          borderColor:'#FCB034', backgroundColor:t.pFill,
           borderWidth:2, pointRadius:0, fill:true, tension:0, yAxisID:'y2' }
       ]
     },
@@ -1026,11 +1127,13 @@ function renderChart(res, mc, prazo) {
 //  UPDATE UI
 // ══════════════════════════════════════════════════
 function updateUI() {
-  const parcela = parseFloat(el('iParcela').value) || 0;
-  const prazo   = parseInt(el('iPrazo').value)     || 0;
+  const parcela = parseBRL(el('iParcela').value);
+  const prazo   = parseInt(el('iPrazo').value) || 0;
   if (!parcela || !prazo) return;
   const incc    = parseFloat(el('iINCC').value)    || 6;
   const aluguel = parseFloat(el('iAluguel').value) || 0.7;
+  const fundo   = parseFloat(el('iFundo').value)   || 0.9;
+  const seguro  = el('iSeguro').checked;
 
   const slider = el('sContempl');
   slider.max   = prazo - 1;
@@ -1046,7 +1149,12 @@ function updateUI() {
   el('dPillPre').textContent = `PRÉ: ${mc} meses`;
   el('dPillPos').textContent = `PÓS: ${prazo - mc} meses`;
 
-  const r = simulate(parcela, prazo, incc, aluguel, mc);
+  const r = simulate(parcela, prazo, incc, aluguel, mc, seguro, fundo);
+
+  // Atualiza label do fator para refletir se seguro está ativo
+  el('kC0Sub').textContent = seguro
+    ? 'Carta de crédito (parcela ÷ 0,3878%) · c/ seguro'
+    : 'Carta de crédito (parcela ÷ 0,3382%)';
 
   el('kC0').textContent    = R(r.c0);
   el('kSI').textContent    = R(r.saldoInic);
@@ -1082,6 +1190,12 @@ function updateUI() {
   el('s3Rend').textContent   = R(r.s3.rendM);
   el('s3Meses').textContent  = r.s3.mesesRest + ' meses no fundo';
   el('s3Final').textContent  = R(r.s3.final);
+
+  // Atualiza labels dinâmicos do Cenário 3 com a taxa configurada
+  const fundoStr = fundo.toLocaleString('pt-BR', {minimumFractionDigits:1, maximumFractionDigits:2}) + '%';
+  el('s3Sub').innerHTML     = `Crédito investido no fundo a <strong>${fundoStr} a.m.</strong> sobre o capital total da carta. Reajuste via INCC ${incc}% a.a. Desembolso = pré + pós.`;
+  el('s3RendLbl').textContent  = `Rendimento Mensal Inicial (${fundoStr})`;
+  el('s3FinalLbl').textContent = `Valor Final do Crédito (${fundoStr} a.m.)`;
   el('s3Desemb').textContent = R(r.s3.desemb);
   el('s3Ganho').textContent  = R(r.s3.ganho);
   el('s3Ganho').className    = 'm-val ' + (r.s3.ganho >= 0 ? 'pos' : 'neg');
@@ -1091,7 +1205,7 @@ function updateUI() {
 
   // Salva estado da simulação para captura no lead
   lastSim = {
-    parcela, prazo, incc, aluguel, mc,
+    parcela, prazo, incc, aluguel, fundo, mc, seguro,
     creditoInicial:   r.c0,
     parcelaPos:       r.parcelaPos,
     totalDesemb:      r.totalDesemb,
@@ -1144,28 +1258,21 @@ function updateUI() {
 })();
 
 // ══════════════════════════════════════════════════
-//  THEME TOGGLE
+//  EVENT LISTENERS + BOOTSTRAP
 // ══════════════════════════════════════════════════
-function applyTheme(theme) {
-  document.documentElement.dataset.theme = theme;
-  localStorage.setItem('apTheme', theme);
-  const isLight = theme === 'light';
-  el('themeIcon').textContent  = isLight ? '🌙' : '☀️';
-  el('themeLabel').textContent = isLight ? 'Modo Escuro' : 'Modo Claro';
-  updateUI(); // re-render chart with new colours
-}
-
-el('themeToggle').addEventListener('click', () => {
-  const current = document.documentElement.dataset.theme;
-  applyTheme(current === 'light' ? 'dark' : 'light');
-});
-
-['iParcela','iPrazo','iINCC','iAluguel','sContempl'].forEach(id =>
+['iPrazo','iINCC','iAluguel','iFundo','sContempl'].forEach(id =>
   el(id).addEventListener('input', updateUI)
 );
+// Parcela precisa da máscara ANTES do recálculo
+el('iParcela').addEventListener('input', (e) => {
+  applyCurrencyMask(e.target);
+  updateUI();
+});
+// Checkbox usa 'change' em vez de 'input'
+el('iSeguro').addEventListener('change', updateUI);
 
-// Init: restore saved preference
-applyTheme(localStorage.getItem('apTheme') || 'dark');
+// Renderização inicial (valores default nos inputs)
+updateUI();
 
 // ══════════════════════════════════════════════════
 //  LEAD CAPTURE → GOOGLE SHEETS
@@ -1187,10 +1294,12 @@ async function submitLead(e) {
     timestamp:          new Date().toLocaleString('pt-BR'),
     nome, email, telefone,
     // Parâmetros da simulação
-    parcela:            fmtR(sim.parcela),
+    parcela:            sim.parcela ? formatBRL(sim.parcela) : '—',
     prazo:              sim.prazo ? sim.prazo + ' meses' : '—',
     incc:               sim.incc  ? sim.incc + '% a.a.' : '—',
     aluguel:            sim.aluguel ? sim.aluguel + '% a.m.' : '—',
+    taxaFundo:          sim.fundo   ? sim.fundo   + '% a.m.' : '—',
+    seguro:             sim.seguro  ? 'Sim (MIP/DFI 0,0496%)' : 'Não',
     mesContemplacao:    sim.mc    ? 'Mês ' + sim.mc : '—',
     // Resultados
     creditoInicial:     fmtR(sim.creditoInicial),
@@ -1206,7 +1315,7 @@ async function submitLead(e) {
     c2ValorImovel:      fmtR(sim.s2Imovel),
     c2RendaBrutaMensal: fmtR(sim.s2Renda),
     c2ROIMensal:        sim.s2ROIm != null ? fmt(sim.s2ROIm) + '% a.m.' : '—',
-    // Cenário 3 — Fundo Ademicon
+    // Cenário 3 — Fundo Racon
     c3CapitalInicial:   fmtR(sim.s3Cap),
     c3ValorFinal:       fmtR(sim.s3Final),
     c3GanhoLiquido:     fmtR(sim.s3Ganho),

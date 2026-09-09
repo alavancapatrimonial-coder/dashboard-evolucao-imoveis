@@ -12,3 +12,20 @@ vercel.json
 _primeiro-push.bat
 _push-debug.bat
 Reinitialized existing Git repository in C:/Users/NIKOLLAS/Dashboard Evolução Imoveis/deploy/.git/
+warning: in the working copy of '_push-debug.bat', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'push-log.txt', LF will be replaced by CRLF the next time Git touches it
+A  _push-debug.bat
+AM push-log.txt
+[main 5abac2c] chore: deploy inicial da v11 (cliente)
+ 2 files changed, 104 insertions(+)
+ create mode 100644 _push-debug.bat
+ create mode 100644 push-log.txt
+5abac2c chore: deploy inicial da v11 (cliente)
+0a22916 chore: deploy inicial da v11 (cliente)
+origin	https://github.com/alavancapatrimonial-coder/dashboard-evolucao-imoveis.git (fetch)
+origin	https://github.com/alavancapatrimonial-coder/dashboard-evolucao-imoveis.git (push)
+To https://github.com/alavancapatrimonial-coder/dashboard-evolucao-imoveis.git
+ + 5b38acd...5abac2c main -> main (forced update)
+branch 'main' set up to track 'origin/main'.
+EXITCODE do push: 0 
+OK 
